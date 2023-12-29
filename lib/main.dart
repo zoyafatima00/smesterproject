@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:smesterproject/constants/Constantcolors.dart';
 import 'package:smesterproject/firebase_options.dart';
+import 'package:smesterproject/screens/Splashscreen/splashScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,10 +17,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
+    ConstantColors constantColors=ConstantColors();
     return MaterialApp(
+      home: Splashscreen(),
       debugShowCheckedModeBanner: false,
         theme: ThemeData(
-
+        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: constantColors.blueColor),
+        fontFamily: 'Poppins',
+        canvasColor: Colors.transparent
         ),
     );
   }
