@@ -5,7 +5,9 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:smesterproject/constants/Constantcolors.dart';
 import 'package:smesterproject/screens/Homepage/Homepage.dart';
-import 'package:smesterproject/services/Authentication.dart';
+
+import '../../services/Authentications.dart';
+//import 'package:smesterproject/services/Authentication.dart';
 
 class LandingHelpers with ChangeNotifier {
   ConstantColors constantColors = ConstantColors();
@@ -88,7 +90,7 @@ class LandingHelpers with ChangeNotifier {
                   Provider.of<Authentication>(context, listen: false)
                       .signInWithGoogle()
                       .whenComplete(() {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         PageTransition(
                             child: Homepage(),

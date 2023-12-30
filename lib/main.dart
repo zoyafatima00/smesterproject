@@ -5,7 +5,9 @@ import 'package:smesterproject/constants/Constantcolors.dart';
 import 'package:smesterproject/firebase_options.dart';
 import 'package:smesterproject/screens/Splashscreen/splashScreen.dart';
 import 'package:smesterproject/screens/landingPage/landingHelpers.dart';
-import 'package:smesterproject/services/Authentication.dart';
+
+import 'services/Authentications.dart';
+//import 'package:smesterproject/services/Authentication.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,8 +34,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       providers: [
-        ChangeNotifierProvider(create: (_)=>Authentication()),
+       ChangeNotifierProvider(create: (_)=>Authentication()),
         ChangeNotifierProvider(create: (_)=>LandingHelpers())
+
       ],
     );
   }
