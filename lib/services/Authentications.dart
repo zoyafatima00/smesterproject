@@ -19,7 +19,7 @@ class Authentication with ChangeNotifier {
     UserCredential userCredential = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
     User? user= userCredential.user;
     userUid=user!.uid;
-    print(userUid);
+    print('Created Account Uid=>userUid');
     notifyListeners();
   }
 
