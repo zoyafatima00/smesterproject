@@ -47,29 +47,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDGNd_HXMW2Ur86GKMqekLjKtZdHjfR8mk',
-    appId: '1:379044413189:web:eee4ef71aa11fd7959c16c',
-    messagingSenderId: '379044413189',
-    projectId: 'flutterpushnotification-2ebe9',
-    authDomain: 'flutterpushnotification-2ebe9.firebaseapp.com',
-    storageBucket: 'flutterpushnotification-2ebe9.appspot.com',
-    measurementId: 'G-MX6LPFN370',
+    apiKey: 'AIzaSyA10hJncT0QfLfoCAXS8PFFQf7hRag7Ogw',
+    appId: '1:972650655088:web:ee8665d3478d2f86f133b5',
+    messagingSenderId: '972650655088',
+    projectId: 'thesocial-62d49',
+    authDomain: 'thesocial-62d49.firebaseapp.com',
+    storageBucket: 'thesocial-62d49.appspot.com',
+    measurementId: 'G-D3YW8RC43P',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDzF8P4020AWgODVrN-sjhrZnIkAPiKbFs',
-    appId: '1:379044413189:android:2adfb571adf4177959c16c',
-    messagingSenderId: '379044413189',
-    projectId: 'flutterpushnotification-2ebe9',
-    storageBucket: 'flutterpushnotification-2ebe9.appspot.com',
+    apiKey: 'AIzaSyCy-TsNY1Wj27YrUGYxxTU8dkWFiCepWxc',
+    appId: '1:972650655088:android:1d9a5dd8ad5f2317f133b5',
+    messagingSenderId: '972650655088',
+    projectId: 'thesocial-62d49',
+    storageBucket: 'thesocial-62d49.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBHDwLfXJnbfjDjDw7V2fruifFLG4s7KLY',
-    appId: '1:379044413189:ios:d9ac47cdde3b687959c16c',
-    messagingSenderId: '379044413189',
-    projectId: 'flutterpushnotification-2ebe9',
-    storageBucket: 'flutterpushnotification-2ebe9.appspot.com',
+    apiKey: 'AIzaSyBOia3oT-iQQj1TdfuJC8Qsy-jNFUDs63g',
+    appId: '1:972650655088:ios:d8cc6c1290bec2e7f133b5',
+    messagingSenderId: '972650655088',
+    projectId: 'thesocial-62d49',
+    storageBucket: 'thesocial-62d49.appspot.com',
     iosBundleId: 'com.example.smesterproject',
   );
 }

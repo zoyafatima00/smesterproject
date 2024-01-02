@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:smesterproject/constants/Constantcolors.dart';
 import 'package:smesterproject/screens/Homepage/Homepage.dart';
 import 'package:smesterproject/screens/landingPage/landingServices.dart';
+import 'package:smesterproject/screens/landingPage/landingUtils.dart';
 
 import '../../services/Authentications.dart';
 //import 'package:smesterproject/services/Authentication.dart';
@@ -16,7 +17,7 @@ class LandingHelpers with ChangeNotifier {
     return Container(
       height: MediaQuery.of(context).size.height * 0.65,
       width: MediaQuery.of(context).size.width * 1,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
         image: AssetImage("assets/images/3760.jpg"),
       )),
@@ -198,7 +199,7 @@ class LandingHelpers with ChangeNotifier {
                         fontWeight: FontWeight.bold
                     ),),
                     onPressed:(){
-                    Provider.of<LandingService>(context,listen: false).signInSheet(context);
+                    Provider.of<LandingUtils>(context,listen: false).selectAvatarOptionsSheet(context);
                     }
                 )
               ],

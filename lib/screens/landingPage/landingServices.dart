@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +10,7 @@ import 'package:smesterproject/constants/Constantcolors.dart';
 import 'package:smesterproject/screens/Homepage/Homepage.dart';
 import 'package:smesterproject/screens/landingPage/landingUtils.dart';
 import 'package:smesterproject/services/Authentications.dart';
+import 'package:smesterproject/services/FirebaseOperations.dart';
 
 class LandingService with ChangeNotifier {
   TextEditingController userEmailController = TextEditingController();
@@ -23,6 +25,9 @@ class LandingService with ChangeNotifier {
           return Container(
             height: MediaQuery.of(context).size.height * 0.30,
             width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: constantColors.blueGreyColor,
+                borderRadius: BorderRadius.circular(15.0)),
             child: Column(
               children: [
                 Padding(
@@ -32,98 +37,122 @@ class LandingService with ChangeNotifier {
                     color: constantColors.whiteColor,
                   ),
                 ),
+                // CircleAvatar(
+                //   radius: 80.0,
+                //   backgroundColor: constantColors.transparent,
+                //   backgroundImage: FileImage(
+                //       Provider.of<LandingUtils>(context, listen: false)
+                //           .userAvatar),
+                // ),
                 CircleAvatar(
                   radius: 80.0,
                   backgroundColor: constantColors.transparent,
-                  backgroundImage: FileImage(
-                      Provider.of<LandingUtils>(context, listen: false)
-                          .userAvatar),
+                  backgroundImage: Provider.of<LandingUtils>(context, listen: false).userAvatar != null
+                      ? FileImage(
+                      Provider.of<LandingUtils>(context, listen: false).userAvatar!)
+                      : null, // Provide a default asset or network image if userAvatar is null
                 ),
-                Container(
-                  child: Row(
-                    children: [
-                      MaterialButton(
-                          child: Text(
-                            'Reselect',
-                            style: TextStyle(
-                                color: constantColors.whiteColor,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                                decorationColor: constantColors.whiteColor),
-                          ),
-                          onPressed: () {
-                            Provider.of<LandingUtils>(context, listen: false)
-                                .pickUserAvatar(context, ImageSource.gallery);
-                          }),
-                      MaterialButton(
-                        color: constantColors.blueColor,
-                          child: Text(
-                            'Confirm Image',
-                            style: TextStyle(
-                                color: constantColors.whiteColor,
-                                fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          onPressed: () {
 
-                          })
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MaterialButton(
+                        child: Text(
+                          'Reselect',
+                          style: TextStyle(
+                              color: constantColors.whiteColor,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              decorationColor: constantColors.whiteColor),
+                        ),
+                        onPressed: () {
+                          Provider.of<LandingUtils>(context, listen: false)
+                              .pickUserAvatar(context, ImageSource.gallery);
+                        }),
+                    MaterialButton(
+                      color: constantColors.blueColor,
+                        child: Text(
+                          'Confirm Image',
+                          style: TextStyle(
+                              color: constantColors.whiteColor,
+                              fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        onPressed: () {
+                        Provider.of<FirebaseOperations>(context, listen: false).uploadUserAvatar(context).whenComplete((){
+                          signInSheet(context);
+                        });
+
+                        })
+                  ],
                 )
               ],
             ),
-            decoration: BoxDecoration(
-                color: constantColors.blueGreyColor,
-                borderRadius: BorderRadius.circular(15.0)),
           );
         });
   }
 
   Widget passwordLessSignIn(BuildContext context) {
     return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.40,
-        width: MediaQuery.of(context).size.width,
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('allUsers').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              return ListView(
-                children: snapshot.data!.docs
-                    .map((DocumentSnapshot documentSnapshot) {
-                  return ListTile(
-                    trailing: IconButton(
-                      icon: Icon(FontAwesomeIcons.trash),
-                      color: constantColors.redColor,
-                      onPressed: () {},
+      height: MediaQuery.of(context).size.height * 0.40,
+      width: MediaQuery.of(context).size.width,
+      child: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(
+              child: Text('No users found.'),
+            );
+          } else {
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
+                var data = documentSnapshot.data() as Map<String, dynamic>? ?? {};
+                String userImage = data['userimage'] as String? ?? '/assets/images/3760.jpg';
+                String userEmail = data['useremail'] as String? ?? 'No Email';
+                String userName = data['username'] as String? ?? 'No Username';
+
+                return ListTile(
+                  trailing: IconButton(
+                    icon: const Icon(FontAwesomeIcons.trash),
+                    color: constantColors.redColor,
+                    onPressed: () {},
+                  ),
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(userImage),
+                  ),
+                  subtitle: Text(
+                    userEmail,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: constantColors.greenColor,
+                      fontSize: 12.0,
                     ),
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          (documentSnapshot.data() as dynamic)['userimage']),
+                  ),
+                  title: Text(
+                    userName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: constantColors.greenColor,
                     ),
-                    subtitle: Text(
-                      (documentSnapshot.data() as dynamic)['useremail'],
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: constantColors.greenColor,
-                          fontSize: 12.0),
-                    ),
-                    title: Text(
-                      (documentSnapshot.data() as dynamic)['username'],
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: constantColors.greenColor),
-                    ),
-                  );
-                }).toList(),
-              );
-            }
-          },
-        ));
+                  ),
+                );
+              }).toList(),
+            );
+          }
+        },
+      ),
+
+    );
   }
+
 
   logInSheet(BuildContext context) {
     return showModalBottomSheet(
@@ -138,7 +167,7 @@ class LandingService with ChangeNotifier {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: constantColors.blueGreyColor,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(12.0),
                     topRight: Radius.circular(12.0)),
               ),
@@ -191,18 +220,17 @@ class LandingService with ChangeNotifier {
                           FontAwesomeIcons.check,
                           color: constantColors.whiteColor,
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           if (userEmailController.text.isNotEmpty) {
-                            Provider.of<Authentication>(context, listen: false)
-                                .logIntoAccount(userEmailController.text,
-                                    userPasswordController.text)
-                                .whenComplete(() {
-                              Navigator.pushReplacement(
-                                  context,
-                                  PageTransition(
-                                      child: Homepage(),
-                                      type: PageTransitionType.bottomToTop));
-                            });
+                            try {
+                              await Provider.of<Authentication>(context, listen: false)
+                                  .logIntoAccount(userEmailController.text, userPasswordController.text);
+                              Navigator.pushReplacement(context, PageTransition(child: Homepage(), type: PageTransitionType.bottomToTop));
+                            } on FirebaseAuthException catch (e) {
+                              // Handle different auth errors here
+                              warningText(context, e.message ?? 'An error occurred');
+                            }
+
                           } else {
                             warningText(context, 'Fill all the data');
                           }
@@ -227,7 +255,7 @@ class LandingService with ChangeNotifier {
               height: MediaQuery.of(context).size.height * 0.5,
               decoration: BoxDecoration(
                   color: constantColors.blueGreyColor,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(12.0),
                       topRight: Radius.circular(12.0))),
               child: Column(
@@ -240,6 +268,9 @@ class LandingService with ChangeNotifier {
                     ),
                   ),
                   CircleAvatar(
+                    backgroundImage: FileImage(
+                      Provider.of<LandingUtils>(context,listen: false).getUserAvatar
+                    ),
                     backgroundColor: constantColors.redColor,
                     radius: 60.0,
                   ),
@@ -303,7 +334,16 @@ class LandingService with ChangeNotifier {
                           if (userEmailController.text.isNotEmpty) {
                             Provider.of<Authentication>(context, listen: false)
                                 .createAccount(userEmailController.text,
-                                    userPasswordController.text)
+                                    userPasswordController.text).whenComplete(() {
+                                      print('Creating Collection...');
+                              Provider.of<FirebaseOperations>(context, listen: false).createUserCollection(context,
+                                  {
+                                    'userid': Provider.of<Authentication>(context,listen: false).getUserUid,
+                                    'useremail' : userEmailController.text,
+                                    'username' : userNameController.text,
+                                    'userimage' : Provider.of<LandingUtils>(context,listen: false).getUserAvatarUrl
+                                  });
+                            })
                                 .whenComplete(() {
                               Navigator.pushReplacement(
                                   context,

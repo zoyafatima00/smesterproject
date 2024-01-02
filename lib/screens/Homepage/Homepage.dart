@@ -7,6 +7,7 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: constantColors.redColor,
+      body: Text('Home',style: TextStyle(color: Colors.white)),
 
     );
   }

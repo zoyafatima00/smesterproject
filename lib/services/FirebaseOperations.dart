@@ -1,22 +1,44 @@
-
 import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smesterproject/screens/landingPage/landingUtils.dart';
-class FirebaseOperations with ChangeNotifier{
+import 'package:smesterproject/services/Authentications.dart';
 
+class FirebaseOperations with ChangeNotifier {
   late UploadTask imageUploadTask;
 
-  Future uploadUserAvatar(BuildContext context)async{
+  Future uploadUserAvatar(BuildContext context) async {
+    // Get the file from the provider
+    File userAvatarFile = Provider.of<LandingUtils>(context, listen: false).getUserAvatar;
 
-    Reference imageReference = FirebaseStorage.instance.ref().child(
-      'userProfileAvatar/${Provider.of<LandingUtils>(context,listen: false).getUserAvatar.path}/${TimeOfDay.now()}'
-      imageUploadTask = imageReference.putFile(Provider.of<LandingUtils>(context,listen: false).getUserAvatar);
-      await imageUploadTask.whenComplete(){
+    // Create a unique file name for the upload
+    String fileName = 'userProfileAvatar_${DateTime.now().millisecondsSinceEpoch}';
 
+    // Reference to Firebase Storage
+    Reference imageReference = FirebaseStorage.instance.ref().child(fileName);
+
+    try {
+      // Start the upload task
+      imageUploadTask = imageReference.putFile(userAvatarFile);
+      await imageUploadTask.whenComplete(() => print('Image Uploaded'));
+
+      // Get the download URL
+      String url = await imageReference.getDownloadURL();
+      Provider.of<LandingUtils>(context, listen: false).userAvatarUrl = url;
+      print('The user profile avatar URL => $url');
+      notifyListeners();
+    } catch (e) {
+      print('Upload error: $e');
+      // Handle the error appropriately
     }
-    );
+  }
+
+  Future createUserCollection(BuildContext context, dynamic data) async {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Authentication>(context, listen: false).getUserUid)
+        .set(data);
   }
 }
