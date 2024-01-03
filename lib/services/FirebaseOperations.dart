@@ -8,6 +8,9 @@ import 'package:smesterproject/services/Authentications.dart';
 
 class FirebaseOperations with ChangeNotifier {
   late UploadTask imageUploadTask;
+  late String initUserEmail;
+  late String initUserName;
+  String initUserImage='';
 
   Future uploadUserAvatar(BuildContext context) async {
     // Get the file from the provider
@@ -40,5 +43,23 @@ class FirebaseOperations with ChangeNotifier {
         .collection('users')
         .doc(Provider.of<Authentication>(context, listen: false).getUserUid)
         .set(data);
+  }
+  //use in profile screen
+  Future initUserData(BuildContext context) async{
+    return FirebaseFirestore.instance.collection('user').doc(
+      Provider.of<Authentication>(context,listen: false).getUserUid
+    ).get().then((doc) {
+      print('Fetching User Data');
+      initUserName = doc.data()?['username'];
+      initUserEmail = doc.data()?['useremail'];
+      initUserImage = doc.data()?['userimage'];
+      print(initUserName);
+      print(initUserEmail);
+      print(initUserImage);
+      notifyListeners();
+
+
+    });
+
   }
 }

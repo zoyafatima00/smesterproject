@@ -3,11 +3,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:smesterproject/constants/Constantcolors.dart';
 import 'package:smesterproject/firebase_options.dart';
+import 'package:smesterproject/screens/Feed/FeedHelpers.dart';
+import 'package:smesterproject/screens/Homepage/HomePageHelpers.dart';
+import 'package:smesterproject/screens/Profile/profileHelpers.dart';
 import 'package:smesterproject/screens/Splashscreen/splashScreen.dart';
 import 'package:smesterproject/screens/landingPage/landingHelpers.dart';
 import 'package:smesterproject/screens/landingPage/landingServices.dart';
 import 'package:smesterproject/screens/landingPage/landingUtils.dart';
 import 'package:smesterproject/services/FirebaseOperations.dart';
+import 'package:smesterproject/utils/UploadPost.dart';
 
 import 'services/Authentications.dart';
 //import 'package:smesterproject/services/Authentication.dart';
@@ -37,11 +41,15 @@ class MyApp extends StatelessWidget {
           ),
         ),
       providers: [
-        ChangeNotifierProvider(create: (_)=>LandingUtils()),
-        ChangeNotifierProvider(create: (_)=>FirebaseOperations()),
-       ChangeNotifierProvider(create: (_)=>Authentication()),
-        ChangeNotifierProvider(create: (_)=>LandingHelpers()),
-        ChangeNotifierProvider(create: (_)=>LandingService())
+        ChangeNotifierProvider(create: (_)=> Feedhelpers()),
+        ChangeNotifierProvider(create: (_)=> UploadPost()),
+        ChangeNotifierProvider(create: (_)=> ProfileHelpers()),
+        ChangeNotifierProvider(create: (_)=> HomePageHelpers()),
+        ChangeNotifierProvider(create: (_)=> LandingUtils()),
+        ChangeNotifierProvider(create: (_)=> FirebaseOperations()),
+        ChangeNotifierProvider(create: (_)=> Authentication()),
+        ChangeNotifierProvider(create: (_)=> LandingHelpers()),
+        ChangeNotifierProvider(create: (_)=> LandingService())
 
       ],
     );
