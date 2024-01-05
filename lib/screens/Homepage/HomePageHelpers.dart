@@ -25,8 +25,8 @@ class HomePageHelpers with ChangeNotifier{
         },
         backgroundColor: const Color(0XFF040307),
         items:[
-          CustomNavigationBarItem(icon: Icon(EvaIcons.home)),
-          CustomNavigationBarItem(icon: Icon(Icons.message_rounded)),
+          CustomNavigationBarItem(icon: const Icon(EvaIcons.home)),
+          CustomNavigationBarItem(icon: const Icon(Icons.message_rounded)),
           CustomNavigationBarItem(icon: CircleAvatar(
              radius: 35.0,
              backgroundColor: constantColors.blueGreyColor,

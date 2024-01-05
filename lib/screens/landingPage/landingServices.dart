@@ -23,7 +23,7 @@ class LandingService with ChangeNotifier {
         context: context,
         builder: (context) {
           return Container(
-            height: MediaQuery.of(context).size.height * 0.30,
+            height: MediaQuery.of(context).size.height * 0.4,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: constantColors.blueGreyColor,
@@ -37,54 +37,53 @@ class LandingService with ChangeNotifier {
                     color: constantColors.whiteColor,
                   ),
                 ),
-                // CircleAvatar(
-                //   radius: 80.0,
-                //   backgroundColor: constantColors.transparent,
-                //   backgroundImage: FileImage(
-                //       Provider.of<LandingUtils>(context, listen: false)
-                //           .userAvatar),
-                // ),
-                CircleAvatar(
-                  radius: 80.0,
-                  backgroundColor: constantColors.transparent,
-                  backgroundImage: Provider.of<LandingUtils>(context, listen: false).userAvatar != null
-                      ? FileImage(
-                      Provider.of<LandingUtils>(context, listen: false).userAvatar!)
-                      : null, // Provide a default asset or network image if userAvatar is null
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: CircleAvatar(
+                    radius: 80.0,
+                    backgroundColor: constantColors.transparent,
+                    backgroundImage: Provider.of<LandingUtils>(context, listen: false).userAvatar != null
+                        ? FileImage(
+                        Provider.of<LandingUtils>(context, listen: false).userAvatar!)
+                        : null, // Provide a default asset or network image if userAvatar is null
+                  ),
                 ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MaterialButton(
-                        child: Text(
-                          'Reselect',
-                          style: TextStyle(
-                              color: constantColors.whiteColor,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                              decorationColor: constantColors.whiteColor),
-                        ),
-                        onPressed: () {
-                          Provider.of<LandingUtils>(context, listen: false)
-                              .pickUserAvatar(context, ImageSource.gallery);
-                        }),
-                    MaterialButton(
-                      color: constantColors.blueColor,
-                        child: Text(
-                          'Confirm Image',
-                          style: TextStyle(
-                              color: constantColors.whiteColor,
-                              fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        onPressed: () {
-                        Provider.of<FirebaseOperations>(context, listen: false).uploadUserAvatar(context).whenComplete((){
-                          signInSheet(context);
-                        });
+                Padding(
+                  padding: const EdgeInsets.only(top:12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MaterialButton(
+                          child: Text(
+                            'Reselect',
+                            style: TextStyle(
+                                color: constantColors.whiteColor,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                                decorationColor: constantColors.whiteColor),
+                          ),
+                          onPressed: () {
+                            Provider.of<LandingUtils>(context, listen: false)
+                                .pickUserAvatar(context, ImageSource.gallery);
+                          }),
+                      MaterialButton(
+                        color: constantColors.blueColor,
+                          child: Text(
+                            'Confirm Image',
+                            style: TextStyle(
+                                color: constantColors.whiteColor,
+                                fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          onPressed: () {
+                          Provider.of<FirebaseOperations>(context, listen: false).uploadUserAvatar(context).whenComplete((){
+                            signInSheet(context);
+                          });
 
-                        })
-                  ],
+                          })
+                    ],
+                  ),
                 )
               ],
             ),
@@ -200,6 +199,7 @@ class LandingService with ChangeNotifier {
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: TextField(
                       controller: userPasswordController,
+                      obscureText: true,
                       decoration: InputDecoration(
                           hintText: 'Enter password....',
                           hintStyle: TextStyle(
@@ -252,7 +252,7 @@ class LandingService with ChangeNotifier {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.6,
               decoration: BoxDecoration(
                   color: constantColors.blueGreyColor,
                   borderRadius: const BorderRadius.only(
@@ -310,6 +310,7 @@ class LandingService with ChangeNotifier {
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: TextField(
                       controller: userPasswordController,
+                      obscureText: true,
                       decoration: InputDecoration(
                           hintText: 'Enter password....',
                           hintStyle: TextStyle(

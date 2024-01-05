@@ -20,7 +20,8 @@ class Landingpage extends StatelessWidget {
           Provider.of<LandingHelpers>(context, listen: false)
               .mainButton(context),
           Provider.of<LandingHelpers>(context, listen: false)
-              .privacyText(context)
+              .privacyText(context),
+          const SizedBox(height: 15.0,)
         ],
       ),
     );

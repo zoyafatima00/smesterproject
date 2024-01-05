@@ -172,7 +172,7 @@ class ProfileHelpers with ChangeNotifier{
     return Padding(
       padding: const EdgeInsets.all(6.0),
       child: Container(
-        child: Image.asset(''),
+        child: Image.asset('assets/images/empty-removebg-preview.png'),
         height: MediaQuery.of(context).size.height*0.48,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(

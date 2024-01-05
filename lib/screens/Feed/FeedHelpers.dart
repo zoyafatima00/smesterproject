@@ -16,7 +16,7 @@ class Feedhelpers with ChangeNotifier {
       actions: [
         IconButton(
           onPressed: () {
-            Provider.of<UploadPost>(context, listen: false).selectPostImage(
+            Provider.of<UploadPost>(context, listen: false).selectPostImageType(
               context,
             );
           },

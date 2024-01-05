@@ -33,7 +33,7 @@ class LandingUtils with ChangeNotifier{
   Future selectAvatarOptionsSheet(BuildContext context) async {
     return showModalBottomSheet(context: context, builder:(context) {
       return Container(
-        height: MediaQuery.of(context).size.height * 0.1,
+        height: MediaQuery.of(context).size.height * 0.12,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: constantColor?.blueGreyColor,
@@ -41,8 +41,8 @@ class LandingUtils with ChangeNotifier{
         ),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 150.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 150.0),
               child: Divider(
                 thickness: 4.0,
                 color: Colors.white24,
@@ -53,7 +53,7 @@ class LandingUtils with ChangeNotifier{
               children: [
                 MaterialButton(
                     color: Colors.lightBlueAccent,
-                  child: Text('Gallery', style: TextStyle(
+                  child: const Text('Gallery', style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0,

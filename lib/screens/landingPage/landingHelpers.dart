@@ -69,7 +69,7 @@ class LandingHelpers with ChangeNotifier {
   Widget mainButton(BuildContext context) {
     return Positioned(
         top: 590.0,
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -80,15 +80,15 @@ class LandingHelpers with ChangeNotifier {
 
                 },
                 child: Container(
-                  child: Icon(
-                    EvaIcons.emailOutline,
-                    color: constantColors.yellowColor,
-                  ),
                   width: 80.0,
                   height: 40.0,
                   decoration: BoxDecoration(
                       border: Border.all(color: constantColors.yellowColor),
                       borderRadius: BorderRadius.circular(10.0)),
+                  child: Icon(
+                    EvaIcons.emailOutline,
+                    color: constantColors.yellowColor,
+                  ),
                 ),
               ),
               GestureDetector(
@@ -100,35 +100,22 @@ class LandingHelpers with ChangeNotifier {
                     Navigator.pushReplacement(
                         context,
                         PageTransition(
-                            child: Homepage(),
+                            child: const Homepage(),
                             type: PageTransitionType.leftToRight));
                   });
                 },
                 child: Container(
-                  child: Icon(
-                    FontAwesomeIcons.google,
-                    color: constantColors.redColor,
-                  ),
                   width: 80.0,
                   height: 40.0,
                   decoration: BoxDecoration(
                       border: Border.all(color: constantColors.redColor),
                       borderRadius: BorderRadius.circular(10.0)),
+                  child: Icon(
+                    FontAwesomeIcons.google,
+                    color: constantColors.redColor,
+                  ),
                 ),
               ),
-              GestureDetector(
-                child: Container(
-                  child: Icon(
-                    FontAwesomeIcons.facebookF,
-                    color: constantColors.blueColor,
-                  ),
-                  width: 80.0,
-                  height: 40.0,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: constantColors.blueColor),
-                      borderRadius: BorderRadius.circular(10.0)),
-                ),
-              )
             ],
           ),
         ));
@@ -136,7 +123,7 @@ class LandingHelpers with ChangeNotifier {
 
   Widget privacyText(BuildContext context) {
     return Positioned(
-        top: 660.0,
+        top: 645.0,
         left: 20.0,
         right: 20.0,
         child: Container(

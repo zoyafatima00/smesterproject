@@ -10,7 +10,7 @@ class FirebaseOperations with ChangeNotifier {
   late UploadTask imageUploadTask;
   late String initUserEmail;
   late String initUserName;
-  String initUserImage='';
+   String initUserImage='';
 
   Future uploadUserAvatar(BuildContext context) async {
     // Get the file from the provider
@@ -46,7 +46,7 @@ class FirebaseOperations with ChangeNotifier {
   }
   //use in profile screen
   Future initUserData(BuildContext context) async{
-    return FirebaseFirestore.instance.collection('user').doc(
+    return FirebaseFirestore.instance.collection('users').doc(
       Provider.of<Authentication>(context,listen: false).getUserUid
     ).get().then((doc) {
       print('Fetching User Data');
@@ -62,4 +62,18 @@ class FirebaseOperations with ChangeNotifier {
     });
 
   }
+
+  //to handle/share post
+
+  Future uploadPostData(String postId, dynamic data) async {
+    try {
+      await FirebaseFirestore.instance.collection('posts').doc(postId).set(data);
+      print('Post added to Firebase FireStore');
+    } catch (e) {
+      // Handle the error here
+      print('Error: $e');
+      // You can also rethrow the error or handle it in any other way you prefer
+    }
+  }
+
 }

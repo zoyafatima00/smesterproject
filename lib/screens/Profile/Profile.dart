@@ -61,11 +61,11 @@ class Profile extends StatelessWidget {
                   : null, // Handle null or empty UID
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (!snapshot.hasData || snapshot.data == null) {
-                  return Center(child: Text("No data available"));
+                  return const Center(child: Text("No data available"));
                 } else {
-                  return new Column(
+                  return Column(
                     children: [
                       Provider.of<ProfileHelpers>(context,listen: false).headerProfile(context, snapshot),
                       Provider.of<ProfileHelpers>(context,listen: false).divider(),
