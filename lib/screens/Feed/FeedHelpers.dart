@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:smesterproject/services/Authentications.dart';
 import 'package:smesterproject/utils/UploadPost.dart';
 
 import '../../constants/Constantcolors.dart';
@@ -50,10 +53,25 @@ class Feedhelpers with ChangeNotifier {
         child: Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.9,
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: SizedBox(
+                  height: 500.0,
+                  width: 400.0,
+                ),
+              );
+            } else {
+             return loadPost(context, snapshot);
+            }
+          },
+        ),
+        height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          color: constantColors.darkColor,
+          color: constantColors.darkColor.withOpacity(0.6),
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(18.0),
               topRight: Radius.circular(18.0)), // BoxDecoration
@@ -62,4 +80,161 @@ class Feedhelpers with ChangeNotifier {
     ) // Padding
         ); // SingleChildScrollView
   }
+
+  Widget loadPost(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    return ListView(
+      children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
+        var userData = documentSnapshot.data() as Map<String, dynamic>?; // Cast with null safety
+        String userImageUrl = userData?['userimage'] ?? 'empty-removebg-preview.png';
+        String caption = userData?['caption'] ?? 'No caption';
+        String username = userData?['username'] ?? 'Anonymous';
+        String userUid = userData?['useruid'] ?? 'Anonymous';
+        String postImageUrl = userData?['postimage'] ?? 'empty-removebg-preview.png';
+
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.75,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0 , left: 8.0),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      child: CircleAvatar(
+                        backgroundColor: constantColors.blueGreyColor,
+                        radius: 20.0,
+                        backgroundImage: NetworkImage(userImageUrl),
+                      ),
+                      onTap: () {},
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width*0.6,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              caption,
+                              style: TextStyle(
+                                color: constantColors.greenColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text: username,
+                                style: TextStyle(
+                                  color: constantColors.greenColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: ' , 12 hours ago', // Example time text
+                                    style: TextStyle(color: constantColors.lightColor.withOpacity(0.8)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top:8.0),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.46,
+                  width: MediaQuery.of(context).size.width,
+                  child: FittedBox(
+                    child: Image.network(postImageUrl, scale: 2),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Row(
+                  //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Container(
+                            height: 80.0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  child: Icon(FontAwesomeIcons.heart,color: constantColors.redColor,size: 22.0,),
+                                ),
+                                const SizedBox(width: 5.0,),
+                                Text('0',style: TextStyle(color: constantColors.whiteColor,fontSize: 18.0,fontWeight: FontWeight.bold),)
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Container(
+                            height: 80.0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  child: Icon(FontAwesomeIcons.comments,color: constantColors.blueColor,size: 22.0,),
+                                ),
+                                const SizedBox(width: 12.0,),
+                                Text('0',style: TextStyle(color: constantColors.whiteColor,fontSize: 18.0,fontWeight: FontWeight.bold),)
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Container(
+                            height: 80.0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  child: Icon(FontAwesomeIcons.award,color: constantColors.yellowColor,size: 22.0,),
+                                ),
+                                const SizedBox(width: 5.0,),
+                                Text('0',style: TextStyle(color: constantColors.whiteColor,fontSize: 18.0,fontWeight: FontWeight.bold),)
+                              ],
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+
+                    Spacer(),
+                    Provider.of<Authentication>(context,listen: false).getUserUid == userUid ?
+                    IconButton(onPressed: (){}, icon: Icon(EvaIcons.moreVertical,color: constantColors.whiteColor,)):
+                    Container(
+                      height: 0.0,
+                      width: 0.0,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+
 }

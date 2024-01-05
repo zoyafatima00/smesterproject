@@ -270,6 +270,7 @@ class UploadPost with ChangeNotifier {
                 onPressed: () async {
                   Provider.of<FirebaseOperations>(context, listen: false)
                       .uploadPostData(captionController.text, {
+                        'postimage' : getUploadPostUrl,
                     'caption': captionController.text,
                     'username': Provider.of<FirebaseOperations>(context,listen: false).initUserName,
                     'userimage': Provider.of<FirebaseOperations>(context,listen: false).initUserImage,
