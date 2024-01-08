@@ -122,7 +122,9 @@ class LandingService with ChangeNotifier {
                   trailing: IconButton(
                     icon: const Icon(FontAwesomeIcons.trash),
                     color: constantColors.redColor,
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<FirebaseOperations>(context,listen:false).deleteUserData(documentSnapshot['useruid'],'users');
+                    },
                   ),
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(userImage),
