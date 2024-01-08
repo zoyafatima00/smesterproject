@@ -75,6 +75,13 @@ class FirebaseOperations with ChangeNotifier {
       // You can also rethrow the error or handle it in any other way you prefer
     }
   }
+  Future deleteUserData(String userUid,dynamic collection)async{
+    return FirebaseFirestore.instance.collection(collection).doc(userUid).delete();
+  }
+
+  Future updateCaption(String postId,dynamic data)async{
+    return FirebaseFirestore.instance.collection('posts').doc(postId).update(data);
+  }
 
   Future deleteUserData(String userUid) async{
     return FirebaseFirestore.instance.collection('users').doc(
