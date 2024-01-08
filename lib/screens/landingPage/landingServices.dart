@@ -136,8 +136,8 @@ class LandingService with ChangeNotifier {
                           });
                         }, icon: Icon(FontAwesomeIcons.check,color: constantColors.blueColor,)),
                         IconButton(onPressed: (){
-                          Provider.of<FirebaseOperations>(context,listen:false).deleteUserData(documentSnapshot['useruid'],'users');
-                          //Provider.of<FirebaseOperations>(context,listen: false).deleteUserData(userUid);
+                          //Provider.of<FirebaseOperations>(context,listen:false).deleteUserDataTwo(documentSnapshot['useruid'],'users');
+                          Provider.of<FirebaseOperations>(context,listen: false).deleteUserData(userUid);
                         }, icon: Icon(FontAwesomeIcons.trashAlt,color: constantColors.redColor,))
 
                       ],

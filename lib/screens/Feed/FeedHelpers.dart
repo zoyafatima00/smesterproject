@@ -176,9 +176,9 @@ class Feedhelpers with ChangeNotifier {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.only(top: 5.0,right: 5.0),
                 child: Row(
-                  //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -334,10 +334,11 @@ class Feedhelpers with ChangeNotifier {
                       ],
                     ),
                     Spacer(),
-                    Provider.of<Authentication>(context, listen: false)
-                                .getUserUid ==
-                            userUid
-                        ? IconButton(
+                    // Provider.of<Authentication>(context, listen: false)
+                    //             .getUserUid ==
+                    //         userUid
+                    //     ?
+                    IconButton(
                             onPressed: () {
                               Provider.of<PostFunctions>(context, listen: false)
                                   .showPostOptions(
@@ -347,10 +348,11 @@ class Feedhelpers with ChangeNotifier {
                               EvaIcons.moreVertical,
                               color: constantColors.whiteColor,
                             ))
-                        : Container(
-                            height: 0.0,
-                            width: 0.0,
-                          )
+                        // : Container(
+                        //     color: Colors.red,
+                        //     height: 1.0,
+                        //     width: 1.0,
+                        //   )
                   ],
                 ),
               ),
