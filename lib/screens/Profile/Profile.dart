@@ -18,7 +18,7 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     // Retrieve the user UID and print it for debugging
     String userUid = Provider.of<Authentication>(context, listen: false).getUserUid;
-    print("User UID: $userUid");
+    print("User UID in Profile: $userUid");
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -61,21 +61,36 @@ class Profile extends StatelessWidget {
                   : null, // Handle null or empty UID
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
+                  // Show a loading spinner while waiting for data
                   return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  // Display an error message if there is an error in fetching data
+                  print("Error: ${snapshot.error}");
+                  return Center(child: Text("Error: ${snapshot.error}"));
                 } else if (!snapshot.hasData || snapshot.data == null) {
+                  // Display a message if no data is available
                   return const Center(child: Text("No data available"));
                 } else {
+                  // Data is available, proceed to build the profile
+                  var data = snapshot.data!.data() as Map<String, dynamic>?;
+                  if (data == null) {
+                    // Handle the case where data is null
+                    return const Center(child: Text("User data is not available"));
+                  }
+
+                  // Extract user data safely
+                  String userImage = data['userimage'] ?? 'default_image_path';
+                  String userEmail = data['useremail'] ?? 'No Email';
+                  String userName = data['username'] ?? 'No Username';
+
                   return Column(
                     children: [
-                      Provider.of<ProfileHelpers>(context,listen: false).headerProfile(context, snapshot),
-                      Provider.of<ProfileHelpers>(context,listen: false).divider(),
-                      Provider.of<ProfileHelpers>(context,listen: false).middleProfile(context, snapshot),
-                      Provider.of<ProfileHelpers>(context,listen: false).footerProfile(context, snapshot),
-
-
+                      Provider.of<ProfileHelpers>(context, listen: false).headerProfile(context, snapshot),
+                      Provider.of<ProfileHelpers>(context, listen: false).divider(),
+                      Provider.of<ProfileHelpers>(context, listen: false).middleProfile(context, snapshot),
+                      Provider.of<ProfileHelpers>(context, listen: false).footerProfile(context, snapshot),
                     ],
                   );
-                  // Your existing code
                 }
               },
             ),

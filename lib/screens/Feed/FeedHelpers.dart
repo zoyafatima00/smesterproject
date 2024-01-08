@@ -90,8 +90,11 @@ class Feedhelpers with ChangeNotifier {
         String username = userData?['username'] ?? 'Anonymous';
         String userUid = userData?['useruid'] ?? 'Anonymous';
         String postImageUrl = userData?['postimage'] ?? 'empty-removebg-preview.png';
+        print("User-UID in FeedHelpers: $userUid");
+
 
         return Container(
+
           height: MediaQuery.of(context).size.height * 0.75,
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -232,6 +235,7 @@ class Feedhelpers with ChangeNotifier {
             ],
           ),
         );
+
       }).toList(),
     );
   }

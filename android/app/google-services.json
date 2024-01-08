@@ -12,7 +12,12 @@
           "package_name": "com.example.smesterproject"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "972650655088-h99snpd4vh2je2umor54ho5shemujfpr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCy-TsNY1Wj27YrUGYxxTU8dkWFiCepWxc"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972650655088-h99snpd4vh2je2umor54ho5shemujfpr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "972650655088-ootcndji4ha56ntpluda9pre44aiocko.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.smesterproject"
+              }
+            }
+          ]
         }
       }
     }

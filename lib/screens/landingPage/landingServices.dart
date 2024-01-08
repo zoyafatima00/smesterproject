@@ -117,12 +117,30 @@ class LandingService with ChangeNotifier {
                 String userImage = data['userimage'] as String? ?? '/assets/images/3760.jpg';
                 String userEmail = data['useremail'] as String? ?? 'No Email';
                 String userName = data['username'] as String? ?? 'No Username';
+                String userPassword = data['userpassword'] as String? ?? 'No UserPassword';
+                String userUid = data['userid'] as String? ?? 'No UserId';
+                print("User-UID in landingService: $userUid");
+                print("User-psswrd: $userPassword");
 
                 return ListTile(
-                  trailing: IconButton(
-                    icon: const Icon(FontAwesomeIcons.trash),
-                    color: constantColors.redColor,
-                    onPressed: () {},
+                  trailing: Container(
+                    width: 100.0,
+                    height: 40.0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(onPressed: (){
+                          Provider.of<Authentication>(context,listen: false).logIntoAccount(
+                              userEmail, userPassword).whenComplete(() {
+                                Navigator.pushReplacement(context, PageTransition(child: Homepage(), type: PageTransitionType.leftToRight));
+                          });
+                        }, icon: Icon(FontAwesomeIcons.check,color: constantColors.blueColor,)),
+                        IconButton(onPressed: (){
+                          Provider.of<FirebaseOperations>(context,listen: false).deleteUserData(userUid);
+                        }, icon: Icon(FontAwesomeIcons.trashAlt,color: constantColors.redColor,))
+
+                      ],
+                    ),
                   ),
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(userImage),
@@ -131,7 +149,7 @@ class LandingService with ChangeNotifier {
                     userEmail,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: constantColors.greenColor,
+                      color: constantColors.whiteColor,
                       fontSize: 12.0,
                     ),
                   ),
@@ -339,10 +357,12 @@ class LandingService with ChangeNotifier {
                                       print('Creating Collection...');
                               Provider.of<FirebaseOperations>(context, listen: false).createUserCollection(context,
                                   {
+                                    'userpassword' : userPasswordController.text,
                                     'userid': Provider.of<Authentication>(context,listen: false).getUserUid,
                                     'useremail' : userEmailController.text,
                                     'username' : userNameController.text,
-                                    'userimage' : Provider.of<LandingUtils>(context,listen: false).getUserAvatarUrl
+                                    'userimage' : Provider.of<LandingUtils>(context,listen: false).getUserAvatarUrl,
+
                                   });
                             })
                                 .whenComplete(() {

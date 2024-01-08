@@ -12,7 +12,8 @@ class Authentication with ChangeNotifier {
     UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
     User? user= userCredential.user;
     userUid=user!.uid;
-    print(userUid);
+    print("User-UID in Authentication: $userUid");
+
     notifyListeners();
   }
   Future createAccount(String email,String password)async{
