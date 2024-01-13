@@ -3,7 +3,9 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:smesterproject/screens/AltProfile/alt_profile.dart';
 import 'package:smesterproject/services/Authentications.dart';
 import 'package:smesterproject/utils/PostOperations.dart';
 import 'package:smesterproject/utils/UploadPost.dart';
@@ -97,14 +99,14 @@ class Feedhelpers with ChangeNotifier {
         String username = userData?['username'] ?? 'Anonymous';
         String userUid = userData?['useruid'] ?? 'Anonymous';
 
-        String postImageUrl = userData?['postimage'] ?? 'empty-removebg-preview.png';
+        String postImageUrl =
+            userData?['postimage'] ?? 'empty-removebg-preview.png';
         print("User-UID in FeedHelpers: $userUid");
 
         // String postImageUrl =
         //     userData?['postimage'] ?? 'empty-removebg-preview.png';
 
         return Container(
-
           height: MediaQuery.of(context).size.height * 0.75,
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -116,12 +118,24 @@ class Feedhelpers with ChangeNotifier {
                 child: Row(
                   children: [
                     GestureDetector(
+                      onTap: () {
+                        if (documentSnapshot['useruid'] !=
+                            Provider.of<Authentication>(context, listen: false)
+                                .getUserUid) {
+                          Navigator.pushReplacement(
+                              context,
+                              PageTransition(
+                                  child: AltProfile(
+                                    userUid: documentSnapshot['useruid'],
+                                  ),
+                                  type: PageTransitionType.bottomToTop));
+                        }
+                      },
                       child: CircleAvatar(
                         backgroundColor: constantColors.blueGreyColor,
                         radius: 20.0,
                         backgroundImage: NetworkImage(userImageUrl),
                       ),
-                      onTap: () {},
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),
@@ -176,7 +190,7 @@ class Feedhelpers with ChangeNotifier {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 5.0,right: 5.0),
+                padding: const EdgeInsets.only(top: 5.0, right: 5.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -334,11 +348,10 @@ class Feedhelpers with ChangeNotifier {
                       ],
                     ),
                     Spacer(),
-                    // Provider.of<Authentication>(context, listen: false)
-                    //             .getUserUid ==
-                    //         userUid
-                    //     ?
-                    IconButton(
+                    Provider.of<Authentication>(context, listen: false)
+                                .getUserUid ==
+                            userUid
+                        ? IconButton(
                             onPressed: () {
                               Provider.of<PostFunctions>(context, listen: false)
                                   .showPostOptions(
@@ -348,18 +361,17 @@ class Feedhelpers with ChangeNotifier {
                               EvaIcons.moreVertical,
                               color: constantColors.whiteColor,
                             ))
-                        // : Container(
-                        //     color: Colors.red,
-                        //     height: 1.0,
-                        //     width: 1.0,
-                        //   )
+                        : Container(
+                            color: Colors.red,
+                            height: 1.0,
+                            width: 1.0,
+                          )
                   ],
                 ),
               ),
             ],
           ),
         );
-
       }).toList(),
     );
   }
