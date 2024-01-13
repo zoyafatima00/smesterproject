@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:smesterproject/screens/landingPage/landingUtils.dart';
 import 'package:smesterproject/services/Authentications.dart';
@@ -89,5 +90,47 @@ class FirebaseOperations with ChangeNotifier {
     ).delete();
 
   }
+
+  //adding avatars
+  int count = 0;
+  void addImages() {
+    var storage = FirebaseStorage.instance;
+    List<String> listOfImage = [
+      'assets/avatars/chatbot-avatar.jpg',
+      'assets/avatars/gif-tenor-image.jpg',
+      'assets/avatars/handsome-little-brother.jpg',
+      'assets/avatars/live-chat-icon-0.png',
+      'assets/avatars/smiling-girl.jpg',
+    ];
+    listOfImage.forEach((img) async {
+      String imageName = img
+          .substring(img.lastIndexOf("/"), img.lastIndexOf("."))
+          .replaceAll("/", "");
+
+      String path = img.substring(img.indexOf("/") + 1, img.lastIndexOf("/"));
+
+      final Directory systemTempDir = Directory.systemTemp;
+      final byteData = await rootBundle.load(img);
+      final file = File('${systemTempDir.path}/$imageName.jpeg');
+      await file.writeAsBytes(byteData.buffer
+          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+      TaskSnapshot taskSnapshot =
+      await storage.ref('$path/$imageName').putFile(file);
+      final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      await FirebaseFirestore.instance
+          .collection('chatroomIcons')
+          .add({"url": downloadUrl, "avatars": imageName});
+      count++;
+      print(count);
+    });
+    print('finished.............');
+  }
+
+  Future submitChatroomData(String chatroomName, dynamic chatroomData) async{
+    return FirebaseFirestore.instance.collection('chatrooms').doc(
+      chatroomName
+    ).set(chatroomData);
+  }
+
 
 }

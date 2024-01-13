@@ -334,10 +334,10 @@ class Feedhelpers with ChangeNotifier {
                       ],
                     ),
                     Spacer(),
-                    // Provider.of<Authentication>(context, listen: false)
-                    //             .getUserUid ==
-                    //         userUid
-                    //     ?
+                    Provider.of<Authentication>(context, listen: false)
+                                .getUserUid ==
+                            userUid
+                        ?
                     IconButton(
                             onPressed: () {
                               Provider.of<PostFunctions>(context, listen: false)
@@ -348,11 +348,11 @@ class Feedhelpers with ChangeNotifier {
                               EvaIcons.moreVertical,
                               color: constantColors.whiteColor,
                             ))
-                        // : Container(
-                        //     color: Colors.red,
-                        //     height: 1.0,
-                        //     width: 1.0,
-                        //   )
+                        : Container(
+                           // color: Colors.red,
+                            height: 0.0,
+                            width: 0.0,
+                          )
                   ],
                 ),
               ),

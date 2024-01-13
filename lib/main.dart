@@ -4,8 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:smesterproject/constants/Constantcolors.dart';
 import 'package:smesterproject/firebase_options.dart';
 import 'package:smesterproject/screens/AltProfile/alt_profile_helper.dart';
+import 'package:smesterproject/screens/ChatRoom/ChatroomHelpers.dart';
 import 'package:smesterproject/screens/Feed/FeedHelpers.dart';
 import 'package:smesterproject/screens/Homepage/HomePageHelpers.dart';
+import 'package:smesterproject/screens/Messaging/GroupMessageHelpers.dart';
 import 'package:smesterproject/screens/Profile/profileHelpers.dart';
 import 'package:smesterproject/screens/Splashscreen/splashScreen.dart';
 import 'package:smesterproject/screens/landingPage/landingHelpers.dart';
@@ -43,6 +45,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       providers: [
+        ChangeNotifierProvider(create: (_)=> GroupMeassageHelper()),
+        ChangeNotifierProvider(create: (_)=> ChatRoomHelper()),
         ChangeNotifierProvider(create: (_)=> AltProfileHelper()),
         ChangeNotifierProvider(create: (_)=> PostFunctions()),
         ChangeNotifierProvider(create: (_)=> Feedhelpers()),
