@@ -367,7 +367,7 @@ class LandingService with ChangeNotifier {
                               Provider.of<FirebaseOperations>(context, listen: false).createUserCollection(context,
                                   {
                                     'userpassword' : userPasswordController.text,
-                                    'userid': Provider.of<Authentication>(context,listen: false).getUserUid,
+                                    'useruid': Provider.of<Authentication>(context,listen: false).getUserUid,
                                     'useremail' : userEmailController.text,
                                     'username' : userNameController.text,
                                     'userimage' : Provider.of<LandingUtils>(context,listen: false).getUserAvatarUrl,

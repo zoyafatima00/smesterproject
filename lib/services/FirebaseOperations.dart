@@ -11,14 +11,18 @@ class FirebaseOperations with ChangeNotifier {
   late UploadTask imageUploadTask;
   late String initUserEmail;
   late String initUserName;
-   String initUserImage='';
+  String initUserImage = '';
+  //for sending  stickers to storage
+  int count = 0;
 
   Future uploadUserAvatar(BuildContext context) async {
     // Get the file from the provider
-    File userAvatarFile = Provider.of<LandingUtils>(context, listen: false).getUserAvatar;
+    File userAvatarFile =
+        Provider.of<LandingUtils>(context, listen: false).getUserAvatar;
 
     // Create a unique file name for the upload
-    String fileName = 'userProfileAvatar_${DateTime.now().millisecondsSinceEpoch}';
+    String fileName =
+        'userProfileAvatar_${DateTime.now().millisecondsSinceEpoch}';
 
     // Reference to Firebase Storage
     Reference imageReference = FirebaseStorage.instance.ref().child(fileName);
@@ -45,11 +49,14 @@ class FirebaseOperations with ChangeNotifier {
         .doc(Provider.of<Authentication>(context, listen: false).getUserUid)
         .set(data);
   }
+
   //use in profile screen
-  Future initUserData(BuildContext context) async{
-    return FirebaseFirestore.instance.collection('users').doc(
-      Provider.of<Authentication>(context,listen: false).getUserUid
-    ).get().then((doc) {
+  Future initUserData(BuildContext context) async {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Authentication>(context, listen: false).getUserUid)
+        .get()
+        .then((doc) {
       print('Fetching User Data');
       initUserName = doc.data()?['username'];
       initUserEmail = doc.data()?['useremail'];
@@ -58,17 +65,17 @@ class FirebaseOperations with ChangeNotifier {
       print(initUserEmail);
       print(initUserImage);
       notifyListeners();
-
-
     });
-
   }
 
   //to handle/share post
 
   Future uploadPostData(String postId, dynamic data) async {
     try {
-      await FirebaseFirestore.instance.collection('posts').doc(postId).set(data);
+      await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .set(data);
       print('Post added to Firebase FireStore');
     } catch (e) {
       // Handle the error here
@@ -76,23 +83,33 @@ class FirebaseOperations with ChangeNotifier {
       // You can also rethrow the error or handle it in any other way you prefer
     }
   }
-  Future deleteUserDataTwo(String userUid,dynamic collection)async{
-    return FirebaseFirestore.instance.collection(collection).doc(userUid).delete();
+
+  Future deleteUserDataTwo(String userUid, dynamic collection) async {
+    try {
+      return FirebaseFirestore.instance
+          .collection(collection)
+          .doc(userUid)
+          .delete();
+    } catch (e) {
+      print('Error : $e');
+    }
   }
 
-  Future updateCaption(String postId,dynamic data)async{
-    return FirebaseFirestore.instance.collection('posts').doc(postId).update(data);
+  Future updateCaption(String postId, dynamic data) async {
+    try {
+      return FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .update(data);
+    } catch (e) {
+      print('Error : $e');
+    }
   }
 
-  Future deleteUserData(String userUid) async{
-    return FirebaseFirestore.instance.collection('users').doc(
-      userUid
-    ).delete();
-
+  Future deleteUserData(String userUid) async {
+    return FirebaseFirestore.instance.collection('users').doc(userUid).delete();
   }
 
-  //adding avatars
-  int count = 0;
   void addImages() {
     var storage = FirebaseStorage.instance;
     List<String> listOfImage = [
@@ -132,5 +149,26 @@ class FirebaseOperations with ChangeNotifier {
     ).set(chatroomData);
   }
 
-
+  Future followUser(
+      String followingUid,
+      String followingDocId,
+      dynamic followingData,
+      String followerUid,
+      String followerDocId,
+      dynamic followerData) async {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(followingUid)
+        .collection('followers')
+        .doc(followingDocId)
+        .set(followingData)
+        .whenComplete(() async {
+      return FirebaseFirestore.instance
+          .collection('users')
+          .doc(followerUid)
+          .collection('following')
+          .doc(followerDocId)
+          .set(followerData);
+    });
+  }
 }

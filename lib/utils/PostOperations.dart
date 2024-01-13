@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:smesterproject/constants/Constantcolors.dart';
+import 'package:smesterproject/screens/AltProfile/alt_profile.dart';
 import 'package:smesterproject/services/FirebaseOperations.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -53,7 +55,7 @@ class PostFunctions with ChangeNotifier {
                           ),
                           onPressed: () {
                             showModalBottomSheet(
-                              backgroundColor: constantColors.darkColor,
+                                backgroundColor: constantColors.darkColor,
                                 isScrollControlled: true,
                                 context: context,
                                 builder: (context) {
@@ -160,7 +162,8 @@ class PostFunctions with ChangeNotifier {
                                             Provider.of<FirebaseOperations>(
                                                     context,
                                                     listen: false)
-                                                .deleteUserDataTwo(postId, 'posts')
+                                                .deleteUserDataTwo(
+                                                    postId, 'posts')
                                                 .whenComplete(() =>
                                                     {Navigator.pop(context)});
                                           }),
@@ -293,6 +296,17 @@ class PostFunctions with ChangeNotifier {
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.pushReplacement(
+                                                context,
+                                                PageTransition(
+                                                    child: AltProfile(
+                                                        userUid:
+                                                            documentSnapshot[
+                                                                'useruid']),
+                                                    type: PageTransitionType
+                                                        .bottomToTop));
+                                          },
                                           child: CircleAvatar(
                                             backgroundColor:
                                                 constantColors.darkColor,
@@ -494,6 +508,15 @@ class PostFunctions with ChangeNotifier {
                                 .map((DocumentSnapshot documentSnapshot) {
                           return ListTile(
                             leading: GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    PageTransition(
+                                        child: AltProfile(
+                                            userUid:
+                                                documentSnapshot['useruid']),
+                                        type: PageTransitionType.bottomToTop));
+                              },
                               child: CircleAvatar(
                                 backgroundImage:
                                     NetworkImage(documentSnapshot['userimage']),
