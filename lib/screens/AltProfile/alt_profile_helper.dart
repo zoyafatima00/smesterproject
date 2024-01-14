@@ -9,6 +9,9 @@ import 'package:smesterproject/screens/Homepage/Homepage.dart';
 import 'package:smesterproject/services/Authentications.dart';
 import 'package:smesterproject/services/FirebaseOperations.dart';
 
+import '../../utils/PostOperations.dart';
+import 'alt_profile.dart';
+
 class AltProfileHelper with ChangeNotifier {
   ConstantColors constantColors = ConstantColors();
   Widget appBar(BuildContext context) {
@@ -22,7 +25,7 @@ class AltProfileHelper with ChangeNotifier {
           Navigator.pushReplacement(
               context,
               PageTransition(
-                  child: Homepage(), type: PageTransitionType.bottomToTop));
+                  child: const Homepage(), type: PageTransitionType.bottomToTop));
         },
       ),
       backgroundColor: constantColors.blueGreyColor.withOpacity(0.9),
@@ -377,21 +380,74 @@ class AltProfileHelper with ChangeNotifier {
 
   Widget footerProfile(BuildContext context, dynamic snapShot) {
     return Padding(
-      padding: const EdgeInsets.all(6.0),
+      padding: const EdgeInsets.all(8.0),
       child: Container(
-        child: Image.asset('assets/images/empty-removebg-preview.png'),
-        height: MediaQuery.of(context).size.height * 0.45,
+        height: MediaQuery.of(context).size.height * 0.28,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: constantColors.darkColor.withOpacity(0.4),
           borderRadius: BorderRadius.circular(5.0),
         ),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('users')
+              .doc((snapShot.data as DocumentSnapshot).get('useruid'))
+              .collection('posts')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.data == null || !snapshot.hasData) {
+              return const Center(child: Text('No Data Available'));
+            } else {
+              return GridView(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3
+                ),
+                children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
+                  var data = documentSnapshot.data() as Map<String, dynamic>?;
+                  if (data == null) {
+                    return const Center(child: Text('Document is null'));
+                  }
+                  if (!data.containsKey('postimage')) {
+                    return const Center(child: Text('No Image Available'));
+                  }
+                  return GestureDetector(
+                    onTap: (){
+                      showPostDetails(context, documentSnapshot);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.45,
+                        width: MediaQuery.of(context).size.width,
+                        child: FittedBox(
+                          child: Image.network(
+                              data['postimage']
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              );
+            }
+          },
+        ),
       ),
     );
   }
+
+
   followedNotification(BuildContext context,String name){
     return showModalBottomSheet(context: context, builder: (context){
       return Container(
+        height: MediaQuery.of(context).size.height * 0.1,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: constantColors.darkColor,
+          borderRadius: BorderRadius.circular(12.0)
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -412,13 +468,220 @@ class AltProfileHelper with ChangeNotifier {
             ],
           ),
         ),
-        height: MediaQuery.of(context).size.height * 0.1,
+      );
+    });
+  }
+
+  showPostDetails(BuildContext context,DocumentSnapshot documentSnapshot){
+    return showModalBottomSheet(context: context, builder: (context){
+      return Container(
+        height: MediaQuery.of(context).size.height*0.6,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: constantColors.darkColor,
           borderRadius: BorderRadius.circular(12.0)
         ),
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height*0.3,
+              width: MediaQuery.of(context).size.width,
+              child: FittedBox(
+                child: Image.network(documentSnapshot['postimage']),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(documentSnapshot['caption'],style:TextStyle(
+                color: constantColors.whiteColor,
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold
+              ),),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SizedBox(
+                          height: 80.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onLongPress: () {
+                                  Provider.of<PostFunctions>(context,
+                                      listen: false)
+                                      .showLikes(context,
+                                      documentSnapshot['caption']);
+                                },
+                                onTap: () {
+                                  print('Adding like...');
+                                  Provider.of<PostFunctions>(context,
+                                      listen: false)
+                                      .addLike(
+                                      context,
+                                      documentSnapshot['caption'],
+                                      Provider.of<Authentication>(context,
+                                          listen: false)
+                                          .getUserUid);
+                                },
+                                child: Icon(
+                                  FontAwesomeIcons.heart,
+                                  color: constantColors.redColor,
+                                  size: 22.0,
+                                ),
+                              ),
+                              StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('posts')
+                                      .doc(documentSnapshot['caption'])
+                                      .collection('likes')
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    } else {
+                                      return Padding(
+                                        padding:
+                                        const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          snapshot.data!.docs.length
+                                              .toString(),
+                                          style: TextStyle(
+                                              color:
+                                              constantColors.whiteColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18.0),
+                                        ),
+                                      );
+                                    }
+                                  })
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Container(
+                          height: 80.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Provider.of<PostFunctions>(context,
+                                      listen: false)
+                                      .showCommentsSheet(
+                                      context,
+                                      documentSnapshot,
+                                      documentSnapshot['caption']);
+                                },
+                                child: Icon(
+                                  Icons.comment_rounded,
+                                  color: constantColors.blueColor,
+                                  size: 22.0,
+                                ),
+                              ),
+                              StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('posts')
+                                      .doc(documentSnapshot['caption'])
+                                      .collection('comments')
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    } else {
+                                      return Padding(
+                                        padding:
+                                        const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          snapshot.data!.docs.length
+                                              .toString(),
+                                          style: TextStyle(
+                                              color:
+                                              constantColors.whiteColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18.0),
+                                        ),
+                                      );
+                                    }
+                                  })
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SizedBox(
+                          height: 80.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  //Provider.of<PostFunctions>(context,listen: false).showRewards(context);
+                                },
+                                child: Icon(
+                                  FontAwesomeIcons.award,
+                                  color: constantColors.yellowColor,
+                                  size: 22.0,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5.0,
+                              ),
+                              Text(
+                                '0',
+                                style: TextStyle(
+                                    color: constantColors.whiteColor,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Provider.of<Authentication>(context, listen: false)
+                      .getUserUid ==
+                      documentSnapshot['useruid']
+                      ? IconButton(
+                      onPressed: () {
+                        Provider.of<PostFunctions>(context, listen: false)
+                            .showPostOptions(
+                            context, documentSnapshot['caption']);
+                      },
+                      icon: Icon(
+                        EvaIcons.moreVertical,
+                        color: constantColors.whiteColor,
+                      ))
+                      : const SizedBox(
+                    // color: Colors.red,
+                    height: 0.0,
+                    width: 0.0,
+                  )
+                ],
+              ),
+            )
+
+          ],
+        ),
       );
     });
+
   }
 }

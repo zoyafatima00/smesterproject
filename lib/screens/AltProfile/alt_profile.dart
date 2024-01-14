@@ -18,6 +18,13 @@ class AltProfile extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              color: constantColors.blueGreyColor.withOpacity(0.6),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12.0),
+                  topRight: Radius.circular(12.0))),
           child: StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('users')
@@ -25,11 +32,13 @@ class AltProfile extends StatelessWidget {
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else {
                 return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Provider.of<AltProfileHelper>(context, listen: false)
                         .headerProfile(context, snapshot, userUid),
@@ -40,19 +49,10 @@ class AltProfile extends StatelessWidget {
                     Provider.of<AltProfileHelper>(context, listen: false)
                         .footerProfile(context, snapshot),
                   ],
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                 );
               }
             },
           ),
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              color: constantColors.blueGreyColor.withOpacity(0.6),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12.0),
-                  topRight: Radius.circular(12.0))),
         ),
       ),
     );

@@ -15,8 +15,8 @@ class Feed extends StatelessWidget {
     return Scaffold(
       backgroundColor: constantColors.blueGreyColor,
       appBar: Provider.of<Feedhelpers>(context,listen: false).appBar(context),
-      drawer: Drawer(),
       body: Provider.of<Feedhelpers>(context,listen: false).feedBody(context),
+
 
     );
   }

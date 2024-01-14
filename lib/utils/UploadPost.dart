@@ -277,8 +277,25 @@ class UploadPost with ChangeNotifier {
                     'useruid': Provider.of<Authentication>(context,listen: false).getUserUid,
                     'time': Timestamp.now(),
                     'useremail': Provider.of<FirebaseOperations>(context,listen: false).initUserEmail,
+                  }).whenComplete(() async{
+                    //Add data under user profile
+                    await FirebaseFirestore.instance.collection('users').doc(
+                      Provider.of<Authentication>(context, listen: false).getUserUid
+                    ).collection('posts').add({
+                      'postimage' : getUploadPostUrl,
+                      'caption': captionController.text,
+                      'username': Provider.of<FirebaseOperations>(context,listen: false).initUserName,
+                      'userimage': Provider.of<FirebaseOperations>(context,listen: false).initUserImage,
+                      'useruid': Provider.of<Authentication>(context,listen: false).getUserUid,
+                      'time': Timestamp.now(),
+                      'useremail': Provider.of<FirebaseOperations>(context,listen: false).initUserEmail,
+                    });
                   }).whenComplete(() {
+                    captionController.clear();
                     Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+
                   });
                 },
                 color: constantColors.blueColor,
@@ -294,4 +311,5 @@ class UploadPost with ChangeNotifier {
           );
         });
   }
+
 }

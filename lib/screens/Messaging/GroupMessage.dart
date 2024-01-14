@@ -193,6 +193,7 @@ class _GroupMessageState extends State<GroupMessage> {
                       if(messageController.text.isNotEmpty){
                         Provider.of<GroupMeassageHelper>(context,listen: false)
                             .sendMessage(context, widget.documentSnapshot, messageController);
+                        messageController.clear();
                       }
                     },backgroundColor:
                       constantColors.blueColor,

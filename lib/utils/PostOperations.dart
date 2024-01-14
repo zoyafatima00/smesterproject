@@ -237,6 +237,11 @@ class PostFunctions with ChangeNotifier {
             child: Container(
               height: MediaQuery.of(context).size.height * 0.55,
               width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: constantColors.blueGreyColor,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12.0),
+                      topRight: Radius.circular(12.0))),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -262,7 +267,7 @@ class PostFunctions with ChangeNotifier {
                       ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     height: MediaQuery.of(context).size.height * 0.40,
                     width: MediaQuery.of(context).size.width,
                     child: StreamBuilder<QuerySnapshot>(
@@ -275,14 +280,14 @@ class PostFunctions with ChangeNotifier {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(
+                          return const Center(
                             child: CircularProgressIndicator(),
                           );
                         } else {
-                          return new ListView(
+                          return ListView(
                               children: snapshot.data!.docs
                                   .map((DocumentSnapshot documentSnapshot) {
-                            return Container(
+                            return SizedBox(
                               height: MediaQuery.of(context).size.height * 0.15,
                               width: MediaQuery.of(context).size.width,
                               child: Column(
@@ -354,14 +359,16 @@ class PostFunctions with ChangeNotifier {
                                                     constantColors.yellowColor,
                                                 size: 12,
                                               ),
-                                              onPressed: () {},
+                                              onPressed: () {
+
+                                              },
                                             ),
                                           ],
                                         ),
                                       )
                                     ],
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width:
                                         MediaQuery.of(context).size.width * 0.9,
                                     child: Row(
@@ -393,7 +400,27 @@ class PostFunctions with ChangeNotifier {
                                             color: constantColors.redColor,
                                             size: 16,
                                           ),
-                                          onPressed: () {},
+                                          onPressed: () {
+
+                                            // Assuming 'comments' is the collection name and each comment has a unique document ID
+                                            // You need the ID of the comment to delete
+                                            String commentId = documentSnapshot.id; // Get the comment ID
+
+                                            FirebaseFirestore.instance
+                                                .collection('posts')
+                                                .doc(docId) // The ID of the post to which the comment belongs
+                                                .collection('comments')
+                                                .doc(commentId) // The ID of the comment to be deleted
+                                                .delete()
+                                                .then((_) {
+                                              print("Comment successfully deleted!");
+                                              // Optionally, refresh the comments list or perform other actions
+                                            }).catchError((error) {
+                                              print("Error removing comment: $error");
+                                            });
+
+
+                                          },
                                         ),
                                       ],
                                     ),
@@ -449,11 +476,6 @@ class PostFunctions with ChangeNotifier {
                       ))
                 ],
               ),
-              decoration: BoxDecoration(
-                  color: constantColors.blueGreyColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12.0),
-                      topRight: Radius.circular(12.0))),
             ),
           );
         });
