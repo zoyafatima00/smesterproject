@@ -253,6 +253,9 @@ class LandingService with ChangeNotifier {
                               await Provider.of<Authentication>(context, listen: false)
                                   .logIntoAccount(userEmailController.text, userPasswordController.text);
                               Navigator.pushReplacement(context, PageTransition(child: Homepage(), type: PageTransitionType.bottomToTop));
+                              userEmailController.text = '';
+                              userPasswordController.text='';
+                              notifyListeners();
                             } on FirebaseAuthException catch (e) {
                               // Handle different auth errors here
                               warningText(context, e.message ?? 'An error occurred');

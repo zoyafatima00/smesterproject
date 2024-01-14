@@ -113,11 +113,11 @@ class FirebaseOperations with ChangeNotifier {
   void addImages() {
     var storage = FirebaseStorage.instance;
     List<String> listOfImage = [
+      'assets/avatars/mssg.png',
+      'assets/avatars/discussion.png',
+      'assets/avatars/man.png',
+      'assets/avatars/gossips.png',
       'assets/avatars/chatbot-avatar.jpg',
-      'assets/avatars/gif-tenor-image.jpg',
-      'assets/avatars/handsome-little-brother.jpg',
-      'assets/avatars/live-chat-icon-0.png',
-      'assets/avatars/smiling-girl.jpg',
     ];
     listOfImage.forEach((img) async {
       String imageName = img

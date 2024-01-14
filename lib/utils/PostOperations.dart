@@ -359,9 +359,7 @@ class PostFunctions with ChangeNotifier {
                                                     constantColors.yellowColor,
                                                 size: 12,
                                               ),
-                                              onPressed: () {
-
-                                              },
+                                              onPressed: () {},
                                             ),
                                           ],
                                         ),
@@ -401,25 +399,27 @@ class PostFunctions with ChangeNotifier {
                                             size: 16,
                                           ),
                                           onPressed: () {
-
                                             // Assuming 'comments' is the collection name and each comment has a unique document ID
                                             // You need the ID of the comment to delete
-                                            String commentId = documentSnapshot.id; // Get the comment ID
+                                            String commentId = documentSnapshot
+                                                .id; // Get the comment ID
 
                                             FirebaseFirestore.instance
                                                 .collection('posts')
-                                                .doc(docId) // The ID of the post to which the comment belongs
+                                                .doc(
+                                                    docId) // The ID of the post to which the comment belongs
                                                 .collection('comments')
-                                                .doc(commentId) // The ID of the comment to be deleted
+                                                .doc(
+                                                    commentId) // The ID of the comment to be deleted
                                                 .delete()
                                                 .then((_) {
-                                              print("Comment successfully deleted!");
+                                              print(
+                                                  "Comment successfully deleted!");
                                               // Optionally, refresh the comments list or perform other actions
                                             }).catchError((error) {
-                                              print("Error removing comment: $error");
+                                              print(
+                                                  "Error removing comment: $error");
                                             });
-
-
                                           },
                                         ),
                                       ],
@@ -486,6 +486,13 @@ class PostFunctions with ChangeNotifier {
         context: context,
         builder: (context) {
           return Container(
+            height: MediaQuery.of(context).size.height * 0.50,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: constantColors.blueGreyColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0))),
             child: Column(
               children: [
                 Padding(
@@ -525,9 +532,10 @@ class PostFunctions with ChangeNotifier {
                           child: CircularProgressIndicator(),
                         );
                       } else {
-                        return new ListView(
+                        return ListView(
                             children: snapshot.data!.docs
                                 .map((DocumentSnapshot documentSnapshot) {
+                                  var documentData = documentSnapshot.data() as Map<String, dynamic>;
                           return ListTile(
                             leading: GestureDetector(
                               onTap: () {
@@ -567,6 +575,60 @@ class PostFunctions with ChangeNotifier {
                                     height: 0.0,
                                   )
                                 : MaterialButton(
+                                    onPressed: () {
+                                      Provider.of<FirebaseOperations>(context,
+                                              listen: false)
+                                          .followUser(
+                                              documentSnapshot['useruid'],
+                                              Provider.of<Authentication>(
+                                                      context,
+                                                      listen: false)
+                                                  .getUserUid,
+                                              {
+                                                'username': Provider.of<
+                                                            FirebaseOperations>(
+                                                        context,
+                                                        listen: false)
+                                                    .initUserName,
+                                                'userimage': Provider.of<
+                                                            FirebaseOperations>(
+                                                        context,
+                                                        listen: false)
+                                                    .initUserImage,
+                                                'useruid':
+                                                    Provider.of<Authentication>(
+                                                            context,
+                                                            listen: false)
+                                                        .getUserUid,
+                                                'useremail': Provider.of<
+                                                            FirebaseOperations>(
+                                                        context,
+                                                        listen: false)
+                                                    .initUserEmail,
+                                                'time': Timestamp.now()
+                                              },
+                                              Provider.of<Authentication>(
+                                                      context,
+                                                      listen: false)
+                                                  .getUserUid,
+                                              documentSnapshot['useruid'],
+                                              {
+                                                'username':
+                                                documentData['username'],
+                                                'userimage':
+                                                documentData['userimage'],
+                                                'useremail':
+                                                documentData['useremail'],
+                                                'useruid':
+                                                documentData['useruid'],
+                                                'time': Timestamp.now()
+                                              })
+                                          .whenComplete(() => {
+                                                followedNotification(context,
+                                                    documentData['username'])
+                                              });
+                                    },
+                                    color: constantColors.blueColor,
                                     child: Text(
                                       'Follow',
                                       style: TextStyle(
@@ -574,8 +636,6 @@ class PostFunctions with ChangeNotifier {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14.0),
                                     ),
-                                    onPressed: () {},
-                                    color: constantColors.blueColor,
                                   ),
                           );
                         }).toList());
@@ -585,13 +645,6 @@ class PostFunctions with ChangeNotifier {
                 )
               ],
             ),
-            height: MediaQuery.of(context).size.height * 0.50,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                color: constantColors.blueGreyColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.0),
-                    topRight: Radius.circular(12.0))),
           );
         });
   }
@@ -660,4 +713,40 @@ class PostFunctions with ChangeNotifier {
       );
     });
   }*/
+
+  followedNotification(BuildContext context, String name) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.1,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: constantColors.darkColor,
+                borderRadius: BorderRadius.circular(12.0)),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 150.0),
+                    child: Divider(
+                      thickness: 4.0,
+                      color: constantColors.whiteColor,
+                    ),
+                  ),
+                  Text(
+                    'Followed $name',
+                    style: TextStyle(
+                        color: constantColors.whiteColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
 }

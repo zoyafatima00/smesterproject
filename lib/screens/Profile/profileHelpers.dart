@@ -14,6 +14,7 @@ import '../landingPage/landingPage.dart';
 
 class ProfileHelpers with ChangeNotifier {
   ConstantColors constantColors = ConstantColors();
+  int noOfPosts = 0;
   Widget headerProfile(BuildContext context, dynamic snapshot) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.3,
@@ -25,7 +26,7 @@ class ProfileHelpers with ChangeNotifier {
             child: Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: SizedBox(
-                height: 220.0,
+                //height: 220.0,
                 width: 185.0,
                 child: Column(
                   children: [
@@ -49,7 +50,7 @@ class ProfileHelpers with ChangeNotifier {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
+                      padding: const EdgeInsets.only(top: 8.0,left: 2.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -190,7 +191,7 @@ class ProfileHelpers with ChangeNotifier {
                         child: Column(
                           children: [
                             Text(
-                              '0',
+                              '$noOfPosts',
                               style: TextStyle(
                                   color: constantColors.whiteColor,
                                   fontWeight: FontWeight.bold,
@@ -220,8 +221,11 @@ class ProfileHelpers with ChangeNotifier {
       child: SizedBox(
         height: 25.0,
         width: 350.0,
-        child: Divider(
-          color: constantColors.whiteColor,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6.0,vertical: 10.0),
+          child: Divider(
+            color: constantColors.whiteColor,
+          ),
         ),
       ),
     );
@@ -267,9 +271,9 @@ class ProfileHelpers with ChangeNotifier {
                   height: MediaQuery.of(context).size.height * 0.095,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    color : Colors.blueGrey,
-                    //color: constantColors.darkColor.withOpacity(0.4),
+                    color: constantColors.darkColor.withOpacity(0.4),
                     borderRadius: BorderRadius.circular(15.0),
+                      border: Border.all(color: constantColors.yellowColor.withOpacity(0.6))
                   ),
                   child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
@@ -296,7 +300,7 @@ class ProfileHelpers with ChangeNotifier {
                               } else {
                                 return GestureDetector(
                                   child: Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 6.0,vertical: 3.0),
                                     child: CircleAvatar(
                                       radius: 30.0,
                                       backgroundColor: constantColors.darkColor,
@@ -331,7 +335,7 @@ class ProfileHelpers with ChangeNotifier {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.28,
+        height: MediaQuery.of(context).size.height * 0.39,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: constantColors.darkColor.withOpacity(0.4),
@@ -345,10 +349,12 @@ class ProfileHelpers with ChangeNotifier {
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.data == null || !snapshot.hasData) {
-              return Center(child: Text('No Data Available'));
+              return const Center(child: Text('No Data Available'));
             } else {
+              noOfPosts = snapshot.data!.docs.length;
+              notifyListeners();
               return GridView(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3
@@ -356,10 +362,10 @@ class ProfileHelpers with ChangeNotifier {
                 children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
                   var data = documentSnapshot.data() as Map<String, dynamic>?;
                   if (data == null) {
-                    return Center(child: Text('Document is null'));
+                    return const Center(child: Text('Document is null'));
                   }
                   if (!data.containsKey('postimage')) {
-                    return Center(child: Text('No Image Available'));
+                    return const Center(child: Text('No Image Available'));
                   }
                   return GestureDetector(
                     onTap: (){
@@ -379,6 +385,7 @@ class ProfileHelpers with ChangeNotifier {
                     ),
                   );
                 }).toList(),
+
               );
             }
           },

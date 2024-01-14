@@ -18,6 +18,13 @@ class ChatRoomHelper with ChangeNotifier {
   String get getChatroomAvatarUrl => chatroomAvatarUrl;
   String chatroomId = '';
   String get getChatroomId => chatroomId;
+  final List<Color> tileColors = [
+    Colors.indigo,
+    Colors.green,
+    Colors.blue,
+    Colors.purple,
+    // Add more colors as needed
+  ];
 
   void selectChatroomAvatar(String url) {
     chatroomAvatarUrl = url;
@@ -326,7 +333,7 @@ class ChatRoomHelper with ChangeNotifier {
       stream: FirebaseFirestore.instance.collection('chatrooms').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         } else if (!snapshot.hasData || snapshot.data == null) {
@@ -337,54 +344,73 @@ class ChatRoomHelper with ChangeNotifier {
         } else {
           return ListView(
             children:
-                snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
+            snapshot.data!.docs.asMap().map((index, DocumentSnapshot documentSnapshot) {
               var data = documentSnapshot.data()
                   as Map<String, dynamic>; // Cast to Map
               String roomAvatar = data['roomavatar'] ??
                   'empty-removebg-preview.png'; // Provide a default URL
               String roomName = data['roomname'] ??
-                  'empty-removebg-preview.png'; // Provide a default URL
+                  'empty-removebg-preview.png';
+              // Provide a default URL
 
-              return ListTile(
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      PageTransition(
-                          child: GroupMessage(
-                            documentSnapshot: documentSnapshot,
-                          ),
-                          type: PageTransitionType.leftToRight));
-                },
-                onLongPress: () =>
-                    showChatroomDetails(context, documentSnapshot),
-                title: Text(
-                  roomName,
-                  style: TextStyle(
-                      color: constantColors.whiteColor,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold),
+              // Select a color based on the index
+              Color tileColor = tileColors[index % tileColors.length];
+
+              return MapEntry(
+                index, Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ListTile(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25),
+                            topRight: Radius.circular(25),
+                            bottomRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10))
+                    ),
+                    tileColor: tileColor,
+                    //tileColor: constantColors.darkColor.withOpacity(0.8),
+                    textColor: Colors.white,
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          PageTransition(
+                              child: GroupMessage(
+                                documentSnapshot: documentSnapshot,
+                              ),
+                              type: PageTransitionType.leftToRight));
+                    },
+                    onLongPress: () =>
+                        showChatroomDetails(context, documentSnapshot),
+                    title: Text(
+                      roomName,
+                      style: TextStyle(
+                          color: constantColors.whiteColor,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      'Last Message',
+                      style: TextStyle(
+                          color: constantColors.greenColor,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    trailing: Text(
+                      '2 hours ago',
+                      style: TextStyle(
+                          color: constantColors.whiteColor,
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    leading: CircleAvatar(
+                      backgroundColor: constantColors.transparent,
+                      backgroundImage: NetworkImage(roomAvatar),
+                    ),
+                    // Add other ListTile properties if needed
+                  ),
                 ),
-                subtitle: Text(
-                  'Last Message',
-                  style: TextStyle(
-                      color: constantColors.greenColor,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.bold),
-                ),
-                trailing: Text(
-                  '2 hours ago',
-                  style: TextStyle(
-                      color: constantColors.whiteColor,
-                      fontSize: 10.0,
-                      fontWeight: FontWeight.bold),
-                ),
-                leading: CircleAvatar(
-                  backgroundColor: constantColors.transparent,
-                  backgroundImage: NetworkImage(roomAvatar),
-                ),
-                // Add other ListTile properties if needed
               );
-            }).toList(),
+            }).values.toList(),
           );
         }
       },

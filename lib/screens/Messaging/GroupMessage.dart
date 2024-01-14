@@ -95,18 +95,19 @@ class _GroupMessageState extends State<GroupMessage> {
                     child: ChatRoom(), type: PageTransitionType.leftToRight));
           },
         ),
-        centerTitle: true,
+        //centerTitle: true,
         backgroundColor: constantColors.darkColor.withOpacity(0.6),
         title: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.5,
+          //width: MediaQuery.of(context).size.width * 0.5,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CircleAvatar(
                 backgroundColor: constantColors.darkColor,
                 backgroundImage: NetworkImage(roomAvatar),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0),
+                padding: const EdgeInsets.only(left: 6.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,6 +147,7 @@ class _GroupMessageState extends State<GroupMessage> {
       ),
       body: SingleChildScrollView(
         child: Container(
+
           color: constantColors.darkColor,
           child: Column(
             children: [
@@ -153,7 +155,7 @@ class _GroupMessageState extends State<GroupMessage> {
                 child: Provider.of<GroupMeassageHelper>(context,listen: false).showMessages(context, widget.documentSnapshot, userUid),
                 height: MediaQuery.of(context).size.height * 0.8,
                 width: MediaQuery.of(context).size.width,
-                duration: Duration(seconds: 1),
+                duration: Duration(seconds: 3),
                 curve: Curves.bounceIn,
               ),
               Padding(

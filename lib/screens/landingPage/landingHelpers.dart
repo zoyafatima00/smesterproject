@@ -19,7 +19,7 @@ class LandingHelpers with ChangeNotifier {
       width: MediaQuery.of(context).size.width * 1,
       decoration: const BoxDecoration(
           image: DecorationImage(
-        image: AssetImage("assets/images/3760.jpg"),
+        image: AssetImage("assets/images/main_image.PNG"),
       )),
     );
   }
@@ -148,7 +148,7 @@ class LandingHelpers with ChangeNotifier {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: constantColors.blueGreyColor,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(15.0),
             topRight: Radius.circular(15.0)
           )
@@ -169,7 +169,7 @@ class LandingHelpers with ChangeNotifier {
               children: [
                 MaterialButton(
                   color: constantColors.blueColor,
-                    child: Text("Log in",style:TextStyle(
+                    child: Text("Log In",style:TextStyle(
                       color: constantColors.whiteColor,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold
@@ -180,7 +180,7 @@ class LandingHelpers with ChangeNotifier {
                 ),
                 MaterialButton(
                   color: constantColors.redColor,
-                    child: Text("Sign in",style:TextStyle(
+                    child: Text("Sign Up",style:TextStyle(
                         color: constantColors.whiteColor,
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold
