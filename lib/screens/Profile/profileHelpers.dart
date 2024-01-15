@@ -64,7 +64,7 @@ class ProfileHelpers with ChangeNotifier {
                             style: TextStyle(
                                 color: constantColors.whiteColor,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 10.0),
+                                fontSize: 8.0),
                           ),
                         ],
                       ),

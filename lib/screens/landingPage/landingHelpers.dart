@@ -19,7 +19,7 @@ class LandingHelpers with ChangeNotifier {
       width: MediaQuery.of(context).size.width * 1,
       decoration: const BoxDecoration(
           image: DecorationImage(
-        image: AssetImage("assets/images/main_image.PNG"),
+        image: AssetImage("assets/images/3598274.jpg"),
       )),
     );
   }
