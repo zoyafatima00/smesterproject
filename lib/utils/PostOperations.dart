@@ -31,10 +31,12 @@ class PostFunctions with ChangeNotifier {
         builder: (context) {
           return Container(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  //padding: //EdgeInsets.only(
+                     // bottom: MediaQuery.of(context).viewInsets.bottom),
+                  padding: const EdgeInsets.symmetric(horizontal: 125.0),
                   child: Divider(
                     thickness: 4.0,
                     color: constantColors.whiteColor,
@@ -46,6 +48,9 @@ class PostFunctions with ChangeNotifier {
                     children: [
                       MaterialButton(
                           color: constantColors.blueColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), // Set border radius here
+                          ),
                           child: Text(
                             'Edit Caption',
                             style: TextStyle(
@@ -59,58 +64,106 @@ class PostFunctions with ChangeNotifier {
                                 isScrollControlled: true,
                                 context: context,
                                 builder: (context) {
-                                  return Container(
-                                    child: Center(
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            color: Colors.blue,
-                                            width: 300,
-                                            height: 50,
-                                            child: TextField(
-                                              decoration: InputDecoration(
-                                                hintText: 'Add New Caption',
-                                                hintStyle: TextStyle(
-                                                    color: constantColors
-                                                        .whiteColor,
+                                  return Padding(
+                                      padding: EdgeInsets.only(
+                                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                                  child: Container(
+                                  height: MediaQuery.of(context).size.height * 0.20,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                  color: constantColors.blueGreyColor,
+                                  borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12.0),
+                                  topRight: Radius.circular(12.0))),
+                                  child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                  Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 150.0),
+                                  child: Divider(
+                                  thickness: 4.0,
+                                  color: constantColors.whiteColor,
+                                  ),
+                                  ),
+                                  Container(
+                                  width: 140.0,
+                                  decoration: BoxDecoration(
+                                  border: Border.all(color: constantColors.whiteColor),
+                                  borderRadius: BorderRadius.circular(5.0)),
+                                  child: Center(
+                                  child: Text(
+                                  'Edit Caption',
+                                  style: TextStyle(
+                                  color: constantColors.blueColor,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold),
+                                  ),
+                                  ),
+                                  ),
+                                    SizedBox(
+                                      height: MediaQuery.of(context).size.height * 0.05,
+                                    ),
+                                    Container(
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Container(
+                                              width: 300,
+                                              height: 50,
+                                              child: TextField(
+                                                decoration: InputDecoration(
+                                                  hintText: ' Add New Caption',
+                                                  hintStyle: TextStyle(
+                                                      color: constantColors
+                                                          .whiteColor,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 16.0),
+                                                ),
+                                                style: TextStyle(
+                                                    color:
+                                                    constantColors.whiteColor,
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16.0),
+                                                controller:
+                                                updatedCaptionController,
                                               ),
-                                              style: TextStyle(
-                                                  color:
-                                                      constantColors.whiteColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16.0),
-                                              controller:
-                                                  updatedCaptionController,
                                             ),
-                                          ),
-                                          FloatingActionButton(
-                                              backgroundColor:
-                                                  constantColors.redColor,
-                                              child: Icon(
-                                                FontAwesomeIcons.upload,
-                                                color:
-                                                    constantColors.whiteColor,
-                                              ),
-                                              onPressed: () {
-                                                Provider.of<FirebaseOperations>(
-                                                        context,
-                                                        listen: false)
-                                                    .updateCaption(postId, {
-                                                  'caption':
-                                                      updatedCaptionController
-                                                          .text
-                                                });
-                                              })
-                                        ],
+                                            FloatingActionButton(
+                                                backgroundColor:
+                                                constantColors.redColor,
+                                                child: Icon(
+                                                  FontAwesomeIcons.upload,
+                                                  color:
+                                                  constantColors.whiteColor,
+                                                ),
+                                                onPressed: () {
+                                                  Provider.of<FirebaseOperations>(
+                                                      context,
+                                                      listen: false)
+                                                      .updateCaption(postId, {
+                                                    'updatedcaption': updatedCaptionController.text,
+                                                  });
+                                                  updatedCaptionController.clear();
+                                                  Navigator.pop(context);
+                                                })
+                                          ],
+                                        ),
                                       ),
-                                    ),
+                                    )
+                                  ]
+                                  )
+                                  )
                                   );
-                                });
+                                }).whenComplete(() =>{
+                                  Navigator.pop(context)
+                            });
                           }),
                       MaterialButton(
                           color: constantColors.redColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(17.0), // Set border radius here
+                          ),
                           child: Text(
                             'Delete Post',
                             style: TextStyle(
@@ -176,7 +229,7 @@ class PostFunctions with ChangeNotifier {
                 )
               ],
             ),
-            height: MediaQuery.of(context).size.height * 0.1,
+            height: MediaQuery.of(context).size.height * 0.11,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: constantColors.blueGreyColor,

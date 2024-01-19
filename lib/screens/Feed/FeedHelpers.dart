@@ -99,7 +99,7 @@ class Feedhelpers with ChangeNotifier {
               as Map<String, dynamic>?; // Cast with null safety
           String userImageUrl =
               userData?['userimage'] ?? 'empty-removebg-preview.png';
-          String caption = userData?['caption'] ?? 'No caption';
+          String caption = userData?['updatedcaption'] ?? 'No caption';
           String username = userData?['username'] ?? 'Anonymous';
           String userUid = userData?['useruid'] ?? 'Anonymous';
 
