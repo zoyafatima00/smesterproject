@@ -275,6 +275,7 @@ class UploadPost with ChangeNotifier {
                       .uploadPostData(captionController.text, {
                         'postimage' : getUploadPostUrl,
                     'caption': captionController.text,
+                    'updatedcaption':captionController.text,
                     'username': Provider.of<FirebaseOperations>(context,listen: false).initUserName,
                     'userimage': Provider.of<FirebaseOperations>(context,listen: false).initUserImage,
                     'useruid': Provider.of<Authentication>(context,listen: false).getUserUid,
@@ -286,6 +287,7 @@ class UploadPost with ChangeNotifier {
                       Provider.of<Authentication>(context, listen: false).getUserUid
                     ).collection('posts').add({
                       'postimage' : getUploadPostUrl,
+                      'updated caption' :captionController.text,
                       'caption': captionController.text,
                       'username': Provider.of<FirebaseOperations>(context,listen: false).initUserName,
                       'userimage': Provider.of<FirebaseOperations>(context,listen: false).initUserImage,

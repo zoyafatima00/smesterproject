@@ -748,6 +748,5 @@ class AltProfileHelper with ChangeNotifier {
         ),
       );
     });
-
   }
 }
