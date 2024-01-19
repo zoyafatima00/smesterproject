@@ -44,7 +44,8 @@ class _ChatRoomState extends State<ChatRoom> {
         backgroundColor: constantColors.darkColor.withOpacity(0.6),
         centerTitle: true,
         actions: [
-          IconButton(icon: Icon(EvaIcons.moreVertical,color: constantColors.whiteColor,), onPressed: () {  },)
+          IconButton(icon: Icon(EvaIcons.moreVertical,color: constantColors.whiteColor,), onPressed: () {
+          },)
         ],
         leading: IconButton(
           icon: Icon(

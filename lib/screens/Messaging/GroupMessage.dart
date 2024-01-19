@@ -147,7 +147,6 @@ class _GroupMessageState extends State<GroupMessage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-
           color: constantColors.darkColor,
           child: Column(
             children: [

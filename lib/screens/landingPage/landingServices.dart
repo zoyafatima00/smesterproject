@@ -356,38 +356,65 @@ class LandingService with ChangeNotifier {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: FloatingActionButton(
-                        backgroundColor: constantColors.redColor,
-                        child: Icon(
-                          FontAwesomeIcons.check,
-                          color: constantColors.whiteColor,
-                        ),
-                        onPressed: () {
-                          if (userEmailController.text.isNotEmpty) {
-                            Provider.of<Authentication>(context, listen: false)
-                                .createAccount(userEmailController.text,
-                                    userPasswordController.text).whenComplete(() {
-                                      print('Creating Collection...');
-                              Provider.of<FirebaseOperations>(context, listen: false).createUserCollection(context,
-                                  {
-                                    'userpassword' : userPasswordController.text,
-                                    'useruid': Provider.of<Authentication>(context,listen: false).getUserUid,
-                                    'useremail' : userEmailController.text,
-                                    'username' : userNameController.text,
-                                    'userimage' : Provider.of<LandingUtils>(context,listen: false).getUserAvatarUrl,
+                      backgroundColor: constantColors.redColor,
+                      child: Icon(
+                        FontAwesomeIcons.check,
+                        color: constantColors.whiteColor,
+                      ),
+                      onPressed: () async {
+                        if (userEmailController.text.isNotEmpty) {
+                          bool emailExists = await Provider.of<FirebaseOperations>(context, listen: false)
+                              .isEmailRegistered(userEmailController.text);
 
-                                  });
-                            })
-                                .whenComplete(() {
+                          if (emailExists) {
+                            // Email already exists, show alert dialog
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Email Already Registered"),
+                                  content: Text("The email you have entered is already associated with another account."),
+                                  actions: <Widget>[
+                                    ElevatedButton(
+                                      child: Text("OK"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            // Email does not exist, proceed with account creation
+                            await Provider.of<Authentication>(context, listen: false)
+                                .createAccount(
+                                userEmailController.text, userPasswordController.text)
+                                .whenComplete(() async {
+                              // Create User Collection
+                              await Provider.of<FirebaseOperations>(context, listen: false)
+                                  .createUserCollection(context, {
+                                'userpassword': userPasswordController.text,
+                                'useruid': Provider.of<Authentication>(context, listen: false).getUserUid,
+                                'useremail': userEmailController.text,
+                                'username': userNameController.text,
+                                'userimage': Provider.of<LandingUtils>(context, listen: false).getUserAvatarUrl,
+                              });
+
+                              // Navigate to Homepage
                               Navigator.pushReplacement(
                                   context,
                                   PageTransition(
                                       child: Homepage(),
                                       type: PageTransitionType.bottomToTop));
                             });
-                          } else {
-                            warningText(context, 'Fill all the data');
                           }
-                        }),
+                        } else {
+                          warningText(context, 'Fill all the data');
+                        }
+                      },
+                    ),
+
                   )
                 ],
               ),

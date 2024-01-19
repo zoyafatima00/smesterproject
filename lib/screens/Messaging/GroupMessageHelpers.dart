@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:smesterproject/screens/ChatRoom/ChatRoom.dart';
@@ -40,10 +41,21 @@ class GroupMeassageHelper with ChangeNotifier {
               String userName = messageData?['username'] ?? 'Unknown user'; // Provide a default value
               String userMessage = messageData?['message'] ?? 'no message'; // Provide a default value
               String userImage = messageData?['userImage'] ?? 'no Image'; // Provide a default value
+              // Convert Timestamp to DateTime (UTC)
+              Timestamp? timestamp = messageData?['time'] as Timestamp?; // Cast to Timestamp
+              DateTime? dateTimeUtc = timestamp?.toDate(); // Convert to DateTime in UTC
+
+              // Convert UTC DateTime to Islamabad Time (UTC+5+48 mins)
+              DateTime? dateTimeIslamabad = dateTimeUtc?.add(Duration(hours: 5 , minutes: 48));
+
+              // Format time
+              String formattedTime = dateTimeIslamabad != null
+                  ? DateFormat('h:mm a').format(dateTimeIslamabad) // Use any format you like
+                  : 'no time';
 
               return Padding(
                 padding: const EdgeInsets.only(top: 4.0),
-                child: Container(
+                child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.125,
                   width: MediaQuery.of(context).size.width,
                   child: Stack(
@@ -70,32 +82,40 @@ class GroupMeassageHelper with ChangeNotifier {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                     Container(
-                                       width: 150.0,
-                                       child: Row(
-                                         children: [
-                                           Text(userName,style: TextStyle(
-                                             color: constantColors.greenColor,
-                                             fontWeight: FontWeight.bold,
-                                             fontSize: 14.0
-                                           ),),
-                                           Provider.of<Authentication>(context,listen: false).getUserUid == adminUserUid ?
-                                               Padding(
-                                                 padding: const EdgeInsets.only(left: 8.0),
-                                                 child: Icon(FontAwesomeIcons.chessKing,color: constantColors.yellowColor,size: 12.0,),
-                                               ) :
-                                               Container(
-                                                 height: 0.0,
-                                                 width: 0.0,
-                                               ),
-                                         ],
+                                     Flexible(
+                                       child: SizedBox(
+                                         width: 150.0,
+                                         child: Row(
+                                           children: [
+                                             Text(userName,style: TextStyle(
+                                               color: constantColors.greenColor,
+                                               fontWeight: FontWeight.bold,
+                                               fontSize: 14.0
+                                             ),),
+                                             Provider.of<Authentication>(context,listen: false).getUserUid == adminUserUid ?
+                                                 Padding(
+                                                   padding: const EdgeInsets.only(left: 8.0),
+                                                   child: Icon(FontAwesomeIcons.chessKing,color: constantColors.yellowColor,size: 12.0,),
+                                                 ) :
+                                                 const SizedBox(
+                                                   height: 0.0,
+                                                   width: 0.0,
+                                                 ),
+                                           ],
+                                         ),
                                        ),
                                      ),
                                     Text(userMessage,style:
                                       TextStyle(
                                         color: constantColors.whiteColor,
                                         fontSize: 14.0
-                                      ),)
+                                      ),),
+                                    Text(formattedTime,style:
+                                      TextStyle(
+                                        color: constantColors.yellowColor.withOpacity(0.7),
+                                        fontSize: 11.0
+                                      ),),
+
                                   ],
                                 ),
                               ),
@@ -117,13 +137,13 @@ class GroupMeassageHelper with ChangeNotifier {
                           ],
                         ),
                       ) :
-                          Container(
+                          const SizedBox(
                             height: 0.0, width: 0.0,
                           )),
                       Positioned(
                         left: 40,
                           child: Provider.of<Authentication>(context).getUserUid == userUid ?
-                              Container(height: 0.0 , width: 0.0,):
+                              SizedBox(height: 0.0 , width: 0.0,):
                               CircleAvatar(backgroundColor: constantColors.darkColor,
                               backgroundImage: NetworkImage(userImage),
                               )

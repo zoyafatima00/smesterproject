@@ -50,6 +50,19 @@ class FirebaseOperations with ChangeNotifier {
         .set(data);
   }
 
+  //checking if email already exists
+
+  Future<bool> isEmailRegistered(String email) async {
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection('users')
+        .where('useremail', isEqualTo: email)
+        .limit(1)
+        .get();
+
+    return result.docs.isNotEmpty;
+  }
+
+
   //use in profile screen
   Future initUserData(BuildContext context) async {
     return FirebaseFirestore.instance

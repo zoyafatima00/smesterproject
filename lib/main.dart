@@ -16,9 +16,8 @@ import 'package:smesterproject/screens/landingPage/landingUtils.dart';
 import 'package:smesterproject/services/FirebaseOperations.dart';
 import 'package:smesterproject/utils/PostOperations.dart';
 import 'package:smesterproject/utils/UploadPost.dart';
-
 import 'services/Authentications.dart';
-//import 'package:smesterproject/services/Authentication.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

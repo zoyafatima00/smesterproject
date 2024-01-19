@@ -34,6 +34,7 @@ class UploadPost with ChangeNotifier {
     // If we have a picked image, proceed with the rest of the logic
     uploadPostImage = File(uploadPostImageVal.path);
     print(uploadPostImageVal!.path);
+    notifyListeners();
 
     uploadPostImage != null
         ? showPostImage(context)
@@ -171,7 +172,9 @@ class UploadPost with ChangeNotifier {
               )
             ]),
           );
+
         });
+
   }
 
   editPostSheet(BuildContext context) {

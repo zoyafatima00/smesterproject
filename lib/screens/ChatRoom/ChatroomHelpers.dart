@@ -8,8 +8,8 @@ import 'package:smesterproject/screens/AltProfile/alt_profile.dart';
 import 'package:smesterproject/screens/Messaging/GroupMessage.dart';
 import 'package:smesterproject/services/Authentications.dart';
 import 'package:smesterproject/services/FirebaseOperations.dart';
-
 import '../../constants/Constantcolors.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ChatRoomHelper with ChangeNotifier {
   final ConstantColors constantColors = ConstantColors();
@@ -18,6 +18,10 @@ class ChatRoomHelper with ChangeNotifier {
   String get getChatroomAvatarUrl => chatroomAvatarUrl;
   String chatroomId = '';
   String get getChatroomId => chatroomId;
+  String latestMessageTime = '';
+  String get getLatestMessageTime => latestMessageTime;
+
+
   final List<Color> tileColors = [
     Colors.indigo,
     Colors.green,
@@ -338,28 +342,27 @@ class ChatRoomHelper with ChangeNotifier {
           );
         } else if (!snapshot.hasData || snapshot.data == null) {
           // Check for no data
-          return Center(
+          return const Center(
             child: Text("No chatrooms available"),
           );
         } else {
           return ListView(
             children:
             snapshot.data!.docs.asMap().map((index, DocumentSnapshot documentSnapshot) {
+              showLatestMessageTime(documentSnapshot['time']);
               var data = documentSnapshot.data()
                   as Map<String, dynamic>; // Cast to Map
               String roomAvatar = data['roomavatar'] ??
                   'empty-removebg-preview.png'; // Provide a default URL
               String roomName = data['roomname'] ??
                   'empty-removebg-preview.png';
-              // Provide a default URL
-
-              // Select a color based on the index
               Color tileColor = tileColors[index % tileColors.length];
 
               return MapEntry(
                 index, Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: ListTile(
+
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(25),
@@ -368,7 +371,6 @@ class ChatRoomHelper with ChangeNotifier {
                             bottomLeft: Radius.circular(10))
                     ),
                     tileColor: tileColor,
-                    //tileColor: constantColors.darkColor.withOpacity(0.8),
                     textColor: Colors.white,
                     onTap: () {
                       Navigator.pushReplacement(
@@ -381,6 +383,43 @@ class ChatRoomHelper with ChangeNotifier {
                     },
                     onLongPress: () =>
                         showChatroomDetails(context, documentSnapshot),
+                      trailing: Container(
+                        height: 45.0,
+                        width: 80.0, // Adjusted the width to a non-zero value for visibility
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('chatrooms')
+                              .doc(documentSnapshot.id)
+                              .collection('messages')
+                              .orderBy('time', descending: true)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            }
+                            else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                              var firstDoc = snapshot.data!.docs.first.data() as Map<String, dynamic>;
+                              var time = firstDoc['time']; // Assuming 'time' is in the correct format
+                              showLatestMessageTime(time);
+                              return Text(
+                                getLatestMessageTime, // Make sure this is the formatted time string
+                                style: TextStyle(
+                                    color: constantColors.whiteColor,
+                                    fontSize: 11.0,
+                                    fontWeight: FontWeight.bold
+                                ),
+                              );
+                            }
+                            else {
+                              return Text('No messages'); // Updated for clarity
+                            }
+                          },
+                        ),
+                      ),
+
                     title: Text(
                       roomName,
                       style: TextStyle(
@@ -388,24 +427,56 @@ class ChatRoomHelper with ChangeNotifier {
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text(
-                      'Last Message',
-                      style: TextStyle(
-                          color: constantColors.greenColor,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Container(
+                        height: 20,
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('chatrooms')
+                              .doc(documentSnapshot.id)
+                              .collection('messages')
+                              .orderBy('time', descending: true)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const Center(child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                              var firstDoc = snapshot.data!.docs.first.data() as Map<String, dynamic>;
+                              if (firstDoc.containsKey('username') && firstDoc.containsKey('message')) {
+                                return Text(
+                                  '${firstDoc['username']} : ${firstDoc['message']}',
+                                  style: TextStyle(
+                                      color: constantColors.greenColor,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                );
+                              }
+                              else {
+                                return Text('No messages or incomplete data');
+                              }
+                            }
+                            else {
+                              return Text('No messages',
+                                style: TextStyle(
+                                    color: constantColors.greenColor,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold
+                                ),);
+                            }
+                          },
+                        ),
+                      ),
                     ),
-                    trailing: Text(
-                      '2 hours ago',
-                      style: TextStyle(
-                          color: constantColors.whiteColor,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.bold),
-                    ),
+
                     leading: CircleAvatar(
                       backgroundColor: constantColors.transparent,
                       backgroundImage: NetworkImage(roomAvatar),
                     ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     // Add other ListTile properties if needed
                   ),
                 ),
@@ -415,5 +486,13 @@ class ChatRoomHelper with ChangeNotifier {
         }
       },
     );
+  }
+
+  showLatestMessageTime(dynamic timeData){
+    Timestamp t = timeData;
+    DateTime dateTime = t.toDate();
+    latestMessageTime = timeago.format(dateTime);
+    notifyListeners;
+
   }
 }
