@@ -91,22 +91,51 @@ class FirebaseOperations with ChangeNotifier {
           .set(data);
       print('Post added to Firebase FireStore');
     } catch (e) {
-      // Handle the error here
       print('Error: $e');
-      // You can also rethrow the error or handle it in any other way you prefer
     }
   }
 
   Future deleteUserDataTwo(String userUid, dynamic collection) async {
     try {
-      return FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection(collection)
           .doc(userUid)
           .delete();
+          notifyListeners();
     } catch (e) {
       print('Error : $e');
     }
+
   }
+  Future deletePost(String postId, dynamic collection) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(collection)
+          .doc(postId)
+          .delete();
+          notifyListeners();
+    } catch (e) {
+      print('Error : $e');
+    }
+
+  }
+  Future deleteMessage(String chatroomId, String messageId) async {
+    try {
+      print("Deleting message with ID: $messageId from chatroom: $chatroomId");
+      await FirebaseFirestore.instance
+          .collection('chatrooms')
+          .doc(chatroomId)
+          .collection('messages')
+          .doc(messageId)
+          .delete();
+      print("Message deleted successfully.");
+    } catch (e) {
+      print('Error deleting message: $e');
+    }
+  }
+
+
+
 
   Future updateCaption(String postId, dynamic data) async {
     try {
@@ -184,4 +213,5 @@ class FirebaseOperations with ChangeNotifier {
           .set(followerData);
     });
   }
+
 }

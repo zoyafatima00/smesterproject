@@ -263,6 +263,9 @@ class AltProfileHelper with ChangeNotifier {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     MaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
                         color: constantColors.blueColor,
                         child: Text(
                           'Follow',
@@ -311,16 +314,6 @@ class AltProfileHelper with ChangeNotifier {
                                   });
                         }
                         ),
-                    MaterialButton(
-                        color: constantColors.blueColor,
-                        child: Text(
-                          'Message',
-                          style: TextStyle(
-                              color: constantColors.whiteColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0),
-                        ),
-                        onPressed: () {}),
                   ],
                 ),
               ),
@@ -512,7 +505,8 @@ class AltProfileHelper with ChangeNotifier {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: constantColors.darkColor,
-          borderRadius: BorderRadius.circular(12.0)
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+            border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)
         ),
         child: Center(
           child: Column(
@@ -541,19 +535,22 @@ class AltProfileHelper with ChangeNotifier {
   showPostDetails(BuildContext context,DocumentSnapshot documentSnapshot){
     return showModalBottomSheet(context: context, builder: (context){
       return Container(
-        height: MediaQuery.of(context).size.height*0.6,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          color: constantColors.darkColor,
-          borderRadius: BorderRadius.circular(12.0)
+            color: constantColors.darkColor,
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+            border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)
         ),
         child: Column(
           children: [
-            Container(
-              height: MediaQuery.of(context).size.height*0.3,
-              width: MediaQuery.of(context).size.width,
-              child: FittedBox(
-                child: Image.network(documentSnapshot['postimage']),
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: Container(
+                height: MediaQuery.of(context).size.height*0.3,
+                width: MediaQuery.of(context).size.width,
+                child: FittedBox(
+                  child: Image.network(documentSnapshot['postimage']),
+                ),
               ),
             ),
             Padding(

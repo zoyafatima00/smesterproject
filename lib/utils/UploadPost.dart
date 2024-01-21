@@ -66,7 +66,8 @@ class UploadPost with ChangeNotifier {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: constantColors.blueGreyColor,
-                borderRadius: BorderRadius.circular(12.0)),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 150.0),
@@ -79,6 +80,9 @@ class UploadPost with ChangeNotifier {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   MaterialButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
                       color: constantColors.blueColor,
                       child: Text(
                         'Gallery',
@@ -91,6 +95,9 @@ class UploadPost with ChangeNotifier {
                         pickUploadPostImage(context, ImageSource.gallery);
                       }),
                   MaterialButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
                       color: constantColors.blueColor,
                       child: Text(
                         'Camera',
@@ -118,7 +125,8 @@ class UploadPost with ChangeNotifier {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: constantColors.darkColor,
-                borderRadius: BorderRadius.circular(12.0)),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 150.0),
@@ -129,7 +137,7 @@ class UploadPost with ChangeNotifier {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-                child: Container(
+                child: SizedBox(
                   height: 200.0,
                   width: 400.0,
                   child: Image.file(uploadPostImage!, fit: BoxFit.contain),
@@ -154,6 +162,9 @@ class UploadPost with ChangeNotifier {
                         }),
                     MaterialButton(
                         color: constantColors.blueColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
                         child: Text(
                           'Confirm Image',
                           style: TextStyle(
@@ -187,7 +198,8 @@ class UploadPost with ChangeNotifier {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: constantColors.blueGreyColor,
-                borderRadius: BorderRadius.circular(12.0)),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 150.0),
@@ -225,50 +237,48 @@ class UploadPost with ChangeNotifier {
                   )
                 ],
               )),
-              Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        height: 30.0,
-                        width: 30.0,
-                        child: Image.asset(
-                            'assets/icons/sunflower-removebg-preview.png'),
-                      ),
-                      Container(
-                        height: 110.0,
-                        width: 5.0,
-                        color: constantColors.blueColor,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Container(
-                          height: 120.0,
-                          width: 300.0,
-                          child: TextField(
-                            maxLines: 5,
-                            textCapitalization: TextCapitalization.words,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(100)
-                            ],
-                            maxLength: 100,
-                            controller: captionController,
-                            style: TextStyle(
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      height: 30.0,
+                      width: 30.0,
+                      child: Image.asset(
+                          'assets/icons/sunflower-removebg-preview.png'),
+                    ),
+                    Container(
+                      height: 110.0,
+                      width: 5.0,
+                      color: constantColors.blueColor,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Container(
+                        height: 120.0,
+                        width: 300.0,
+                        child: TextField(
+                          maxLines: 5,
+                          textCapitalization: TextCapitalization.words,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(100)
+                          ],
+                          maxLength: 100,
+                          controller: captionController,
+                          style: TextStyle(
+                              color: constantColors.whiteColor,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold),
+                          decoration: InputDecoration(
+                            hintText: 'Add Caption...',
+                            hintStyle: TextStyle(
                                 color: constantColors.whiteColor,
-                                fontSize: 16.0,
+                                fontSize: 14.0,
                                 fontWeight: FontWeight.bold),
-                            decoration: InputDecoration(
-                              hintText: 'Add Caption...',
-                              hintStyle: TextStyle(
-                                  color: constantColors.whiteColor,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold),
-                            ),
                           ),
                         ),
-                      )
-                    ]),
-              ),
+                      ),
+                    )
+                  ]),
               MaterialButton(
                 onPressed: () async {
                   Provider.of<FirebaseOperations>(context, listen: false)

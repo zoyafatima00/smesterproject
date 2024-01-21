@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class GroupMeassageHelper with ChangeNotifier {
           .orderBy('time',descending: true)
           .snapshots(),
       builder: (context, snapshot) {
+        String chatroomId = documentSnapshot.id;
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (!snapshot.hasData || snapshot.data == null) {
@@ -46,11 +48,11 @@ class GroupMeassageHelper with ChangeNotifier {
               DateTime? dateTimeUtc = timestamp?.toDate(); // Convert to DateTime in UTC
 
               // Convert UTC DateTime to Islamabad Time (UTC+5+48 mins)
-              DateTime? dateTimeIslamabad = dateTimeUtc?.add(Duration(hours: 5 , minutes: 48));
+             // DateTime? dateTimeIslamabad = dateTimeUtc?.add(Duration(hours: 5 , minutes: 48));
 
               // Format time
-              String formattedTime = dateTimeIslamabad != null
-                  ? DateFormat('h:mm a').format(dateTimeIslamabad) // Use any format you like
+              String formattedTime = dateTimeUtc != null
+                  ? DateFormat('h:mm a').format(dateTimeUtc) // Use any format you like
                   : 'no time';
 
               return Padding(
@@ -132,8 +134,17 @@ class GroupMeassageHelper with ChangeNotifier {
                           children: [
                             IconButton(onPressed: (){},
                                 icon: Icon(Icons.edit,color: constantColors.blueColor,size: 18.0,)),
-                            IconButton(onPressed: (){},
-                                icon: Icon(FontAwesomeIcons.trash,color: constantColors.redColor,size: 16.0,))
+                            IconButton(
+                                onPressed: () {
+                                  String messageId = documentSnapshot.id; // Message ID for each message
+
+                                  Provider.of<FirebaseOperations>(context, listen: false)
+                                      .deleteMessage(chatroomId, messageId);
+                                  notifyListeners();
+                                },
+                                icon: Icon(FontAwesomeIcons.trash, color: constantColors.redColor, size: 16.0)
+                            )
+
                           ],
                         ),
                       ) :
@@ -222,6 +233,9 @@ class GroupMeassageHelper with ChangeNotifier {
                     child: ChatRoom(),
                     type: PageTransitionType.leftToRight));
           },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
           child: Text('No',style: TextStyle(
               color: constantColors.whiteColor,
               fontSize: 14.0,
@@ -246,6 +260,9 @@ class GroupMeassageHelper with ChangeNotifier {
             Navigator.pop(context);
           });
           },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
             color: constantColors.blueColor,
             child: Text('Yes',style: TextStyle(
                 color: constantColors.whiteColor,

@@ -30,12 +30,16 @@ class PostFunctions with ChangeNotifier {
         isScrollControlled: true,
         builder: (context) {
           return Container(
+            height: MediaQuery.of(context).size.height * 0.11,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: constantColors.blueGreyColor,
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  //padding: //EdgeInsets.only(
-                     // bottom: MediaQuery.of(context).viewInsets.bottom),
                   padding: const EdgeInsets.symmetric(horizontal: 125.0),
                   child: Divider(
                     thickness: 4.0,
@@ -47,9 +51,11 @@ class PostFunctions with ChangeNotifier {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       MaterialButton(
+
                           color: constantColors.blueColor,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0), // Set border radius here
+                            borderRadius: BorderRadius.circular(
+                                18.0), // Set border radius here
                           ),
                           child: Text(
                             'Edit Caption',
@@ -66,103 +72,140 @@ class PostFunctions with ChangeNotifier {
                                 builder: (context) {
                                   return Padding(
                                       padding: EdgeInsets.only(
-                                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                                  child: Container(
-                                  height: MediaQuery.of(context).size.height * 0.20,
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                  color: constantColors.blueGreyColor,
-                                  borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(12.0),
-                                  topRight: Radius.circular(12.0))),
-                                  child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                  Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 150.0),
-                                  child: Divider(
-                                  thickness: 4.0,
-                                  color: constantColors.whiteColor,
-                                  ),
-                                  ),
-                                  Container(
-                                  width: 140.0,
-                                  decoration: BoxDecoration(
-                                  border: Border.all(color: constantColors.whiteColor),
-                                  borderRadius: BorderRadius.circular(5.0)),
-                                  child: Center(
-                                  child: Text(
-                                  'Edit Caption',
-                                  style: TextStyle(
-                                  color: constantColors.blueColor,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold),
-                                  ),
-                                  ),
-                                  ),
-                                    SizedBox(
-                                      height: MediaQuery.of(context).size.height * 0.05,
-                                    ),
-                                    Container(
-                                      child: Center(
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Container(
-                                              width: 300,
-                                              height: 50,
-                                              child: TextField(
-                                                decoration: InputDecoration(
-                                                  hintText: ' Add New Caption',
-                                                  hintStyle: TextStyle(
-                                                      color: constantColors
-                                                          .whiteColor,
-                                                      fontWeight: FontWeight.bold,
-                                                      fontSize: 16.0),
+                                          bottom: MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom),
+                                      child: Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.20,
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width,
+                                          decoration: BoxDecoration(
+                                              color: constantColors
+                                                  .blueGreyColor,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(12.0),
+                                                      topRight: Radius.circular(
+                                                          12.0))),
+                                          child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 150.0),
+                                                  child: Divider(
+                                                    thickness: 4.0,
+                                                    color: constantColors
+                                                        .whiteColor,
+                                                  ),
                                                 ),
-                                                style: TextStyle(
-                                                    color:
-                                                    constantColors.whiteColor,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16.0),
-                                                controller:
-                                                updatedCaptionController,
-                                              ),
-                                            ),
-                                            FloatingActionButton(
-                                                backgroundColor:
-                                                constantColors.redColor,
-                                                child: Icon(
-                                                  FontAwesomeIcons.upload,
-                                                  color:
-                                                  constantColors.whiteColor,
+                                                Container(
+                                                  width: 140.0,
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: constantColors
+                                                              .whiteColor),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0)),
+                                                  child: Center(
+                                                    child: Text(
+                                                      'Edit Caption',
+                                                      style: TextStyle(
+                                                          color: constantColors
+                                                              .blueColor,
+                                                          fontSize: 18.0,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
                                                 ),
-                                                onPressed: () {
-                                                  Provider.of<FirebaseOperations>(
-                                                      context,
-                                                      listen: false)
-                                                      .updateCaption(postId, {
-                                                    'updatedcaption': updatedCaptionController.text,
-                                                  });
-                                                  updatedCaptionController.clear();
-                                                  Navigator.pop(context);
-                                                })
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ]
-                                  )
-                                  )
-                                  );
-                                }).whenComplete(() =>{
-                                  Navigator.pop(context)
-                            });
+                                                SizedBox(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.05,
+                                                ),
+                                                Container(
+                                                  child: Center(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      children: [
+                                                        Container(
+                                                          width: 300,
+                                                          height: 50,
+                                                          child: TextField(
+                                                            decoration:
+                                                                InputDecoration(
+                                                              hintText:
+                                                                  ' Add New Caption',
+                                                              hintStyle: TextStyle(
+                                                                  color: constantColors
+                                                                      .whiteColor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      16.0),
+                                                            ),
+                                                            style: TextStyle(
+                                                                color: constantColors
+                                                                    .whiteColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 16.0),
+                                                            controller:
+                                                                updatedCaptionController,
+                                                          ),
+                                                        ),
+                                                        FloatingActionButton(
+                                                            backgroundColor:
+                                                                constantColors
+                                                                    .redColor,
+                                                            child: Icon(
+                                                              FontAwesomeIcons
+                                                                  .upload,
+                                                              color:
+                                                                  constantColors
+                                                                      .whiteColor,
+                                                            ),
+                                                            onPressed: () {
+                                                              Provider.of<FirebaseOperations>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .updateCaption(
+                                                                      postId, {
+                                                                'updatedcaption':
+                                                                    updatedCaptionController
+                                                                        .text,
+                                                              });
+                                                              updatedCaptionController
+                                                                  .clear();
+                                                              Navigator.pop(
+                                                                  context);
+                                                            })
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                              ])));
+                                }).whenComplete(() => {Navigator.pop(context)});
                           }),
                       MaterialButton(
                           color: constantColors.redColor,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(17.0), // Set border radius here
+                            borderRadius: BorderRadius.circular(
+                                18.0), // Set border radius here
                           ),
                           child: Text(
                             'Delete Post',
@@ -186,6 +229,9 @@ class PostFunctions with ChangeNotifier {
                                     ),
                                     actions: [
                                       MaterialButton(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(18.0),
+                                          ),
                                           child: Text(
                                             'No',
                                             style: TextStyle(
@@ -203,6 +249,9 @@ class PostFunctions with ChangeNotifier {
                                           }),
                                       MaterialButton(
                                           color: constantColors.redColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(18.0),
+                                          ),
                                           child: Text(
                                             'yes',
                                             style: TextStyle(
@@ -215,10 +264,11 @@ class PostFunctions with ChangeNotifier {
                                             Provider.of<FirebaseOperations>(
                                                     context,
                                                     listen: false)
-                                                .deleteUserDataTwo(
-                                                    postId, 'posts')
+                                                .deletePost(
+                                                postId, 'posts')
                                                 .whenComplete(() =>
                                                     {Navigator.pop(context)});
+                                            notifyListeners();
                                           }),
                                     ],
                                   );
@@ -229,13 +279,6 @@ class PostFunctions with ChangeNotifier {
                 )
               ],
             ),
-            height: MediaQuery.of(context).size.height * 0.11,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                color: constantColors.blueGreyColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12.0))),
           );
         });
   }
@@ -292,9 +335,8 @@ class PostFunctions with ChangeNotifier {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: constantColors.blueGreyColor,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(12.0),
-                      topRight: Radius.circular(12.0))),
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                  border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -543,9 +585,8 @@ class PostFunctions with ChangeNotifier {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: constantColors.blueGreyColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.0),
-                    topRight: Radius.circular(12.0))),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
             child: Column(
               children: [
                 Padding(
@@ -588,7 +629,8 @@ class PostFunctions with ChangeNotifier {
                         return ListView(
                             children: snapshot.data!.docs
                                 .map((DocumentSnapshot documentSnapshot) {
-                                  var documentData = documentSnapshot.data() as Map<String, dynamic>;
+                          var documentData =
+                              documentSnapshot.data() as Map<String, dynamic>;
                           return ListTile(
                             leading: GestureDetector(
                               onTap: () {
@@ -667,13 +709,13 @@ class PostFunctions with ChangeNotifier {
                                               documentSnapshot['useruid'],
                                               {
                                                 'username':
-                                                documentData['username'],
+                                                    documentData['username'],
                                                 'userimage':
-                                                documentData['userimage'],
+                                                    documentData['userimage'],
                                                 'useremail':
-                                                documentData['useremail'],
+                                                    documentData['useremail'],
                                                 'useruid':
-                                                documentData['useruid'],
+                                                    documentData['useruid'],
                                                 'time': Timestamp.now()
                                               })
                                           .whenComplete(() => {
@@ -682,6 +724,9 @@ class PostFunctions with ChangeNotifier {
                                               });
                                     },
                                     color: constantColors.blueColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
                                     child: Text(
                                       'Follow',
                                       style: TextStyle(
@@ -701,72 +746,6 @@ class PostFunctions with ChangeNotifier {
           );
         });
   }
-  /*showRewards(BuildContext context){
-    return showModalBottomSheet(context: context, builder: (context){
-      return Container(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 150.0),
-              child: Divider(
-                thickness: 4.0,
-                color: constantColors.whiteColor,
-              ),
-            ),
-            Container(
-              width: 100.0,
-              decoration: BoxDecoration(
-                  border: Border.all(color: constantColors.whiteColor),
-                  borderRadius: BorderRadius.circular(5.0)),
-              child: Center(
-                child: Text(
-                  'Rewards',
-                  style: TextStyle(
-                      color: constantColors.blueColor,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.1,
-              width: MediaQuery.of(context).size.width,
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('awards').snapshots(),
-                builder: (context,snapshot){
-                  if(snapshot.connectionState == ConnectionState.waiting){
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  else{
-                    return ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot){
-                        return Container(
-                          height: 50.0,
-                          width: 50.0,
-                          child: Image.network(documentSnapshot['image']),
-                        );
-
-                      }).toList()
-                    );
-                  }
-                },
-              ),
-            )
-          ],
-        ),
-        height: MediaQuery.of(context).size.height * 0.2,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          color: constantColors.blueGreyColor,
-          borderRadius: BorderRadius.only(topLeft:Radius.circular(12.0) )
-        ),
-      );
-    });
-  }*/
-
   followedNotification(BuildContext context, String name) {
     return showModalBottomSheet(
         context: context,
@@ -776,7 +755,8 @@ class PostFunctions with ChangeNotifier {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: constantColors.darkColor,
-                borderRadius: BorderRadius.circular(12.0)),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

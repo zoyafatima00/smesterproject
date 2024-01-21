@@ -10,9 +10,18 @@ import 'package:smesterproject/services/Authentications.dart';
 
 import '../../constants/Constantcolors.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
    Profile({super.key});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+
+}
+
+class _ProfileState extends State<Profile> {
   final ConstantColors constantColors = ConstantColors();
+
+
 
   @override
   Widget build(BuildContext context) {

@@ -27,7 +27,8 @@ class LandingService with ChangeNotifier {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: constantColors.blueGreyColor,
-                borderRadius: BorderRadius.circular(15.0)),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
             child: Column(
               children: [
                 Padding(
@@ -55,6 +56,7 @@ class LandingService with ChangeNotifier {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       MaterialButton(
+
                           child: Text(
                             'Reselect',
                             style: TextStyle(
@@ -69,6 +71,9 @@ class LandingService with ChangeNotifier {
                           }),
                       MaterialButton(
                         color: constantColors.blueColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
                           child: Text(
                             'Confirm Image',
                             style: TextStyle(
@@ -136,8 +141,8 @@ class LandingService with ChangeNotifier {
                           });
                         }, icon: Icon(FontAwesomeIcons.check,color: constantColors.blueColor,)),
                         IconButton(onPressed: (){
-                          //Provider.of<FirebaseOperations>(context,listen:false).deleteUserDataTwo(documentSnapshot['useruid'],'users');
-                          Provider.of<FirebaseOperations>(context,listen: false).deleteUserData(userUid);
+                          Provider.of<FirebaseOperations>(context,listen:false).deleteUserDataTwo(documentSnapshot['useruid'],'users');
+                          //Provider.of<FirebaseOperations>(context,listen: false).deleteUserData(userUid);
                         }, icon: Icon(FontAwesomeIcons.trashAlt,color: constantColors.redColor,))
 
                       ],
@@ -372,14 +377,24 @@ class LandingService with ChangeNotifier {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text("Email Already Registered"),
-                                  content: Text("The email you have entered is already associated with another account."),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0),
+                                    side: BorderSide(color: Colors.lightGreen.withOpacity(0.4), width: 1),),
+                                  backgroundColor: constantColors.transparent,
+                                  icon: Icon(Icons.error,color: constantColors.redColor,),
+
+                                  title: Text("Email Already Registered",style: TextStyle(color: constantColors.redColor,fontWeight:FontWeight.bold ),),
+                                  content: Text("The email you have entered is already associated with another account.",style: TextStyle(color: constantColors.greenColor.withOpacity(0.6))),
                                   actions: <Widget>[
                                     ElevatedButton(
-                                      child: Text("OK"),
+                                      child: Text("OK",style: TextStyle(color: constantColors.whiteColor.withOpacity(0.7),fontWeight: FontWeight.bold)),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.lightGreen.withOpacity(0.7), // Background color
+                                        onPrimary: constantColors.greenColor, // Text and icon color (if the button is enabled)
+                                        onSurface: Colors.white70, // Text and icon color (if the button is disabled)
+                                      ),
                                     ),
                                   ],
                                 );
@@ -399,6 +414,10 @@ class LandingService with ChangeNotifier {
                                 'useremail': userEmailController.text,
                                 'username': userNameController.text,
                                 'userimage': Provider.of<LandingUtils>(context, listen: false).getUserAvatarUrl,
+                              }).whenComplete(() {
+                                userPasswordController.clear();
+                                userEmailController.clear();
+                                userNameController.clear();
                               });
 
                               // Navigate to Homepage
@@ -428,17 +447,19 @@ class LandingService with ChangeNotifier {
         context: context,
         builder: (context) {
           return Container(
+            
             decoration: BoxDecoration(
-              color: constantColors.darkColor,
-              borderRadius: BorderRadius.circular(15.0),
+              color: Colors.blueGrey.withOpacity(0.7),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)
             ),
-            height: MediaQuery.of(context).size.height * 0.1,
+            height: MediaQuery.of(context).size.height * 0.08,
             width: MediaQuery.of(context).size.width,
             child: Center(
               child: Text(
                 warning,
-                style: TextStyle(
-                    color: constantColors.whiteColor,
+                style: const TextStyle(
+                    color: Colors.red,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold),
               ),

@@ -52,6 +52,9 @@ class LandingUtils with ChangeNotifier{
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 MaterialButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
                     color: Colors.lightBlueAccent,
                   child: const Text('Gallery', style: TextStyle(
                     color: Colors.white,
@@ -66,6 +69,9 @@ class LandingUtils with ChangeNotifier{
                     });
                     }),
                 MaterialButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
                     color: Colors.lightBlueAccent,
                   child: const Text('Camera', style: TextStyle(
                     color: Colors.white,

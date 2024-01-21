@@ -318,37 +318,6 @@ class Feedhelpers with ChangeNotifier {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: SizedBox(
-                              height: 80.0,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      //Provider.of<PostFunctions>(context,listen: false).showRewards(context);
-                                    },
-                                    child: Icon(
-                                      FontAwesomeIcons.award,
-                                      color: constantColors.yellowColor,
-                                      size: 22.0,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5.0,
-                                  ),
-                                  Text(
-                                    '0',
-                                    style: TextStyle(
-                                        color: constantColors.whiteColor,
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                       const Spacer(),

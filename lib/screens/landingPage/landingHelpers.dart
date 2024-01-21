@@ -148,10 +148,8 @@ class LandingHelpers with ChangeNotifier {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: constantColors.blueGreyColor,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(15.0),
-            topRight: Radius.circular(15.0)
-          )
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+            border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)
         ),
         child: Column(
           children: [
@@ -168,6 +166,9 @@ class LandingHelpers with ChangeNotifier {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 MaterialButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
                   color: constantColors.blueColor,
                     child: Text("Log In",style:TextStyle(
                       color: constantColors.whiteColor,
@@ -179,6 +180,9 @@ class LandingHelpers with ChangeNotifier {
                     }
                 ),
                 MaterialButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
                   color: constantColors.redColor,
                     child: Text("Sign Up",style:TextStyle(
                         color: constantColors.whiteColor,
