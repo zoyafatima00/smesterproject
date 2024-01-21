@@ -198,9 +198,8 @@ class LandingService with ChangeNotifier {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: constantColors.blueGreyColor,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(12.0),
-                    topRight: Radius.circular(12.0)),
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                  border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)
               ),
               child: Column(
                 children: [
@@ -289,10 +288,9 @@ class LandingService with ChangeNotifier {
             child: Container(
               height: MediaQuery.of(context).size.height * 0.6,
               decoration: BoxDecoration(
-                  color: constantColors.blueGreyColor,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(12.0),
-                      topRight: Radius.circular(12.0))),
+                  color: constantColors.darkColor,
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                  border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
               child: Column(
                 children: [
                   Padding(
@@ -450,7 +448,7 @@ class LandingService with ChangeNotifier {
             
             decoration: BoxDecoration(
               color: Colors.blueGrey.withOpacity(0.7),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
                 border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)
             ),
             height: MediaQuery.of(context).size.height * 0.08,

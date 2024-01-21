@@ -66,8 +66,11 @@ class UploadPost with ChangeNotifier {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: constantColors.blueGreyColor,
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
-                border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0)),
+                border: Border.all(
+                    color: Colors.yellowAccent.withOpacity(0.3), width: 1)),
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 150.0),
@@ -125,8 +128,11 @@ class UploadPost with ChangeNotifier {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: constantColors.darkColor,
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
-                border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0)),
+                border: Border.all(
+                    color: Colors.yellowAccent.withOpacity(0.3), width: 1)),
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 150.0),
@@ -183,9 +189,7 @@ class UploadPost with ChangeNotifier {
               )
             ]),
           );
-
         });
-
   }
 
   editPostSheet(BuildContext context) {
@@ -198,8 +202,11 @@ class UploadPost with ChangeNotifier {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: constantColors.blueGreyColor,
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
-                border: Border.all(color: Colors.yellowAccent.withOpacity(0.3),width: 1)),
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0)),
+                border: Border.all(
+                    color: Colors.yellowAccent.withOpacity(0.3), width: 1)),
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 150.0),
@@ -237,80 +244,97 @@ class UploadPost with ChangeNotifier {
                   )
                 ],
               )),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      height: 30.0,
-                      width: 30.0,
-                      child: Image.asset(
-                          'assets/icons/sunflower-removebg-preview.png'),
-                    ),
-                    Container(
-                      height: 110.0,
-                      width: 5.0,
-                      color: constantColors.blueColor,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Container(
-                        height: 120.0,
-                        width: 300.0,
-                        child: TextField(
-                          maxLines: 5,
-                          textCapitalization: TextCapitalization.words,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(100)
-                          ],
-                          maxLength: 100,
-                          controller: captionController,
-                          style: TextStyle(
-                              color: constantColors.whiteColor,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold),
-                          decoration: InputDecoration(
-                            hintText: 'Add Caption...',
-                            hintStyle: TextStyle(
-                                color: constantColors.whiteColor,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold),
-                          ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                SizedBox(
+                  height: 30.0,
+                  width: 30.0,
+                  child: Image.asset(
+                      'assets/icons/sunflower-removebg-preview.png'),
+                ),
+                Container(
+                  height: 110.0,
+                  width: 5.0,
+                  color: constantColors.blueColor,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Container(
+                    height: 120.0,
+                    width: 300.0,
+                    child: TextField(
+                      maxLines: 5,
+                      textCapitalization: TextCapitalization.words,
+                      inputFormatters: [LengthLimitingTextInputFormatter(100)],
+                      maxLength: 100,
+                      controller: captionController,
+                      style: TextStyle(
+                          color: constantColors.whiteColor,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold),
+                      decoration: InputDecoration(
+                        hintText: 'Add Caption...',
+                        hintStyle: TextStyle(
+                            color: constantColors.whiteColor,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold),
+                        counterStyle: TextStyle(
+                          color: constantColors.whiteColor,
                         ),
                       ),
-                    )
-                  ]),
+                    ),
+                  ),
+                )
+              ]),
               MaterialButton(
                 onPressed: () async {
                   Provider.of<FirebaseOperations>(context, listen: false)
                       .uploadPostData(captionController.text, {
-                        'postimage' : getUploadPostUrl,
+                    'postimage': getUploadPostUrl,
                     'caption': captionController.text,
-                    'updatedcaption':captionController.text,
-                    'username': Provider.of<FirebaseOperations>(context,listen: false).initUserName,
-                    'userimage': Provider.of<FirebaseOperations>(context,listen: false).initUserImage,
-                    'useruid': Provider.of<Authentication>(context,listen: false).getUserUid,
+                    'updatedcaption': captionController.text,
+                    'username':
+                        Provider.of<FirebaseOperations>(context, listen: false)
+                            .initUserName,
+                    'userimage':
+                        Provider.of<FirebaseOperations>(context, listen: false)
+                            .initUserImage,
+                    'useruid':
+                        Provider.of<Authentication>(context, listen: false)
+                            .getUserUid,
                     'time': Timestamp.now(),
-                    'useremail': Provider.of<FirebaseOperations>(context,listen: false).initUserEmail,
-                  }).whenComplete(() async{
+                    'useremail':
+                        Provider.of<FirebaseOperations>(context, listen: false)
+                            .initUserEmail,
+                  }).whenComplete(() async {
                     //Add data under user profile
-                    await FirebaseFirestore.instance.collection('users').doc(
-                      Provider.of<Authentication>(context, listen: false).getUserUid
-                    ).collection('posts').add({
-                      'postimage' : getUploadPostUrl,
-                      'updated caption' :captionController.text,
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(Provider.of<Authentication>(context, listen: false)
+                            .getUserUid)
+                        .collection('posts')
+                        .add({
+                      'postimage': getUploadPostUrl,
+                      'updated caption': captionController.text,
                       'caption': captionController.text,
-                      'username': Provider.of<FirebaseOperations>(context,listen: false).initUserName,
-                      'userimage': Provider.of<FirebaseOperations>(context,listen: false).initUserImage,
-                      'useruid': Provider.of<Authentication>(context,listen: false).getUserUid,
+                      'username': Provider.of<FirebaseOperations>(context,
+                              listen: false)
+                          .initUserName,
+                      'userimage': Provider.of<FirebaseOperations>(context,
+                              listen: false)
+                          .initUserImage,
+                      'useruid':
+                          Provider.of<Authentication>(context, listen: false)
+                              .getUserUid,
                       'time': Timestamp.now(),
-                      'useremail': Provider.of<FirebaseOperations>(context,listen: false).initUserEmail,
+                      'useremail': Provider.of<FirebaseOperations>(context,
+                              listen: false)
+                          .initUserEmail,
                     });
                   }).whenComplete(() {
                     captionController.clear();
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.pop(context);
-
                   });
                 },
                 color: constantColors.blueColor,
@@ -326,5 +350,4 @@ class UploadPost with ChangeNotifier {
           );
         });
   }
-
 }

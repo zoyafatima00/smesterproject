@@ -76,7 +76,7 @@ class _ChatRoomState extends State<ChatRoom> {
         ),
 
       ),
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Provider.of<ChatRoomHelper>(context, listen: false).showChatrooms(context),

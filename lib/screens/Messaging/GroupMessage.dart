@@ -107,7 +107,7 @@ class _GroupMessageState extends State<GroupMessage> {
                 backgroundImage: NetworkImage(roomAvatar),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 6.0),
+                padding: const EdgeInsets.only(left: 4.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +116,7 @@ class _GroupMessageState extends State<GroupMessage> {
                       roomName,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
+                          fontSize: 14.0,
                           color: constantColors.whiteColor),
                     ),
                     StreamBuilder<QuerySnapshot>(

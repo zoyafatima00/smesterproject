@@ -36,8 +36,9 @@ class LandingUtils with ChangeNotifier{
         height: MediaQuery.of(context).size.height * 0.12,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          color: constantColor?.blueGreyColor,
-          borderRadius: BorderRadiusDirectional.circular(12.0),
+          color: constantColor?.darkColor,
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0),topRight: Radius.circular(12.0)),
+
         ),
         child: Column(
           children: [
