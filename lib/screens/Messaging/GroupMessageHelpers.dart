@@ -58,7 +58,6 @@ class GroupMeassageHelper with ChangeNotifier {
               return Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.125,
                   width: MediaQuery.of(context).size.width,
                   child: Stack(
                     children: [
